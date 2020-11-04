@@ -11,9 +11,9 @@ import (
 
 func NewLoggerPipeline(level log.Level, formatter formatter.Formatter, writer io.Writer) *LoggerPipeline {
 	return &LoggerPipeline{
-		level: level,
+		level:     level,
 		formatter: formatter,
-		writer: writer,
+		writer:    writer,
 	}
 }
 
@@ -75,6 +75,7 @@ func (pipeline *LoggerPipeline) writeD(level log.Level, data interface{}) {
 		}
 	}
 }
+
 // endregion
 
 // region Emergency
@@ -82,15 +83,15 @@ func (pipeline *LoggerPipeline) Emergency(message string) {
 	pipeline.write(log.LevelEmergency, message)
 }
 
-func (pipeline *LoggerPipeline) EmergencyE(err error) {
+func (pipeline *LoggerPipeline) Emergencye(err error) {
 	pipeline.writeE(log.LevelEmergency, err)
 }
 
-func (pipeline *LoggerPipeline) EmergencyD(data interface{}) {
+func (pipeline *LoggerPipeline) Emergencyd(data interface{}) {
 	pipeline.writeD(log.LevelEmergency, data)
 }
 
-func (pipeline *LoggerPipeline) EmergencyF(format string, args ...interface{}) {
+func (pipeline *LoggerPipeline) Emergencyf(format string, args ...interface{}) {
 	pipeline.writeF(log.LevelEmergency, format, args...)
 }
 
@@ -101,15 +102,15 @@ func (pipeline *LoggerPipeline) Alert(message string) {
 	pipeline.write(log.LevelAlert, message)
 }
 
-func (pipeline *LoggerPipeline) AlertE(err error) {
+func (pipeline *LoggerPipeline) Alerte(err error) {
 	pipeline.writeE(log.LevelAlert, err)
 }
 
-func (pipeline *LoggerPipeline) AlertD(data interface{}) {
+func (pipeline *LoggerPipeline) Alertd(data interface{}) {
 	pipeline.writeD(log.LevelAlert, data)
 }
 
-func (pipeline *LoggerPipeline) AlertF(format string, args ...interface{}) {
+func (pipeline *LoggerPipeline) Alertf(format string, args ...interface{}) {
 	pipeline.writeF(log.LevelAlert, format, args...)
 }
 
@@ -120,15 +121,15 @@ func (pipeline *LoggerPipeline) Critical(message string) {
 	pipeline.write(log.LevelCritical, message)
 }
 
-func (pipeline *LoggerPipeline) CriticalE(err error) {
+func (pipeline *LoggerPipeline) Criticale(err error) {
 	pipeline.writeE(log.LevelCritical, err)
 }
 
-func (pipeline *LoggerPipeline) CriticalD(data interface{}) {
+func (pipeline *LoggerPipeline) Criticald(data interface{}) {
 	pipeline.writeD(log.LevelCritical, data)
 }
 
-func (pipeline *LoggerPipeline) CriticalF(format string, args ...interface{}) {
+func (pipeline *LoggerPipeline) Criticalf(format string, args ...interface{}) {
 	pipeline.writeF(log.LevelCritical, format, args...)
 }
 
@@ -139,15 +140,15 @@ func (pipeline *LoggerPipeline) Error(message string) {
 	pipeline.write(log.LevelError, message)
 }
 
-func (pipeline *LoggerPipeline) ErrorE(err error) {
+func (pipeline *LoggerPipeline) Errore(err error) {
 	pipeline.writeE(log.LevelError, err)
 }
 
-func (pipeline *LoggerPipeline) ErrorD(data interface{}) {
+func (pipeline *LoggerPipeline) Errord(data interface{}) {
 	pipeline.writeD(log.LevelError, data)
 }
 
-func (pipeline *LoggerPipeline) ErrorF(format string, args ...interface{}) {
+func (pipeline *LoggerPipeline) Errorf(format string, args ...interface{}) {
 	pipeline.writeF(log.LevelError, format, args...)
 }
 
@@ -158,15 +159,15 @@ func (pipeline *LoggerPipeline) Warning(message string) {
 	pipeline.write(log.LevelWarning, message)
 }
 
-func (pipeline *LoggerPipeline) WarningE(err error) {
+func (pipeline *LoggerPipeline) Warninge(err error) {
 	pipeline.writeE(log.LevelWarning, err)
 }
 
-func (pipeline *LoggerPipeline) WarningD(data interface{}) {
+func (pipeline *LoggerPipeline) Warningd(data interface{}) {
 	pipeline.writeD(log.LevelWarning, data)
 }
 
-func (pipeline *LoggerPipeline) WarningF(format string, args ...interface{}) {
+func (pipeline *LoggerPipeline) Warningf(format string, args ...interface{}) {
 	pipeline.writeF(log.LevelWarning, format, args...)
 }
 
@@ -177,15 +178,15 @@ func (pipeline *LoggerPipeline) Notice(message string) {
 	pipeline.write(log.LevelNotice, message)
 }
 
-func (pipeline *LoggerPipeline) NoticeE(err error) {
+func (pipeline *LoggerPipeline) Noticee(err error) {
 	pipeline.writeE(log.LevelNotice, err)
 }
 
-func (pipeline *LoggerPipeline) NoticeD(data interface{}) {
+func (pipeline *LoggerPipeline) Noticed(data interface{}) {
 	pipeline.writeD(log.LevelNotice, data)
 }
 
-func (pipeline *LoggerPipeline) NoticeF(format string, args ...interface{}) {
+func (pipeline *LoggerPipeline) Noticef(format string, args ...interface{}) {
 	pipeline.writeF(log.LevelNotice, format, args...)
 }
 
@@ -196,15 +197,15 @@ func (pipeline *LoggerPipeline) Info(message string) {
 	pipeline.write(log.LevelInfo, message)
 }
 
-func (pipeline *LoggerPipeline) InfoE(err error) {
+func (pipeline *LoggerPipeline) Infoe(err error) {
 	pipeline.writeE(log.LevelInfo, err)
 }
 
-func (pipeline *LoggerPipeline) InfoD(data interface{}) {
+func (pipeline *LoggerPipeline) Infod(data interface{}) {
 	pipeline.writeD(log.LevelInfo, data)
 }
 
-func (pipeline *LoggerPipeline) InfoF(format string, args ...interface{}) {
+func (pipeline *LoggerPipeline) Infof(format string, args ...interface{}) {
 	pipeline.writeF(log.LevelInfo, format, args...)
 }
 
@@ -215,21 +216,23 @@ func (pipeline *LoggerPipeline) Debug(message string) {
 	pipeline.write(log.LevelDebug, message)
 }
 
-func (pipeline *LoggerPipeline) DebugE(err error) {
+func (pipeline *LoggerPipeline) Debuge(err error) {
 	pipeline.writeE(log.LevelDebug, err)
 }
 
-func (pipeline *LoggerPipeline) DebugD(data interface{}) {
+func (pipeline *LoggerPipeline) Debugd(data interface{}) {
 	pipeline.writeD(log.LevelDebug, data)
 }
 
-func (pipeline *LoggerPipeline) DebugF(format string, args ...interface{}) {
+func (pipeline *LoggerPipeline) Debugf(format string, args ...interface{}) {
 	pipeline.writeF(log.LevelDebug, format, args...)
 }
+
 // endregion
 
 // region Log
 func (pipeline *LoggerPipeline) Log(args ...interface{}) {
 	pipeline.writeF(log.LevelInfo, "%v", args)
 }
+
 //endregion
