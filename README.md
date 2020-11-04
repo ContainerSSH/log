@@ -3,6 +3,10 @@
 <!--suppress HtmlDeprecatedAttribute -->
 <h1 align="center">ContainerSSH Logging Library</h1>
 
+[![Go Report Card](https://goreportcard.com/badge/github.com/containerssh/log?style=for-the-badge)](https://goreportcard.com/report/github.com/containerssh/log)
+[![LGTM Alerts](https://img.shields.io/lgtm/alerts/github/ContainerSSH/log?style=for-the-badge)](https://lgtm.com/projects/g/ContainerSSH/log/)
+
+
 This library provides internal logging for ContainerSSH. Its functionality is very similar to how syslog does logging.
 
 ## Getting a logger
