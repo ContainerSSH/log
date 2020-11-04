@@ -10,10 +10,3 @@ type JsonLine struct {
 	Message string          `json:"message,omitempty"`
 	Details interface{}     `json:"details,omitempty"`
 }
-
-
-
-
-
-
-

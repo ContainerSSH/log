@@ -10,7 +10,7 @@ import (
 
 type LoggerPipelineFactory struct {
 	formatter formatter.Formatter
-	writer io.Writer
+	writer    io.Writer
 }
 
 func NewLoggerPipelineFactory(formatter formatter.Formatter) factory.LoggerFactory {
@@ -26,4 +26,3 @@ func (f *LoggerPipelineFactory) Make(level log.Level) log.Logger {
 		f.writer,
 	)
 }
-

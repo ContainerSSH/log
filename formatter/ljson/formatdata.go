@@ -21,4 +21,3 @@ func (formatter *LogFormatter) FormatData(level log.Level, data interface{}) []b
 	}
 	return line
 }
-

@@ -6,6 +6,7 @@ import (
 
 // swagger:enum Level
 type Level int8
+
 const (
 	LevelDebug     Level = 7
 	LevelInfo      Level = 6

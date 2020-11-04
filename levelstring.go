@@ -4,6 +4,7 @@ import "fmt"
 
 // swagger:enum LevelString
 type LevelString string
+
 const (
 	LevelDebugString     LevelString = "debug"
 	LevelInfoString      LevelString = "info"
