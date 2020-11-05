@@ -1,6 +1,6 @@
 package log
 
-// The logger interface provides logging facilities on various levesl
+// Logger The logger interface provides logging facilities on various levesl
 type Logger interface {
 	SetLevel(level Level)
 	Debug(message string)
