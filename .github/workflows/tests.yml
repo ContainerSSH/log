@@ -15,7 +15,7 @@ jobs:
           go-version: 1.14
 
       - name: Run go fmt
-        run: go fmt -l ./...
+        run: gofmt -l .
       - name: Run go vet
         run: go vet ./...
       - name: Run go cyclo
