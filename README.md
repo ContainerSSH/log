@@ -9,6 +9,8 @@
 
 This library provides internal logging for ContainerSSH. Its functionality is very similar to how syslog does logging.
 
+<p align="center"><strong>Note: This is a developer documentation.</strong><br />The user documentation for ContainerSSH is located at <a href="https://containerssh.github.io">containerssh.github.io</a>.</p>
+
 ## Getting a logger
 
 The main interface provided by this library is the `Logger` interface, which is described in [logger.go](logger.go).
