@@ -7,7 +7,7 @@ import (
 	"github.com/containerssh/log"
 )
 
-// Format a data object
+// FormatData formats a data object
 func (formatter *LogFormatter) FormatData(level log.Level, data interface{}) []byte {
 	l, err := level.String()
 	if err != nil {

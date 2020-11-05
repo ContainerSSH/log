@@ -7,7 +7,7 @@ import (
 	"github.com/containerssh/log"
 )
 
-// Format a string message
+// Format formats a string message
 func (formatter *LogFormatter) Format(level log.Level, message string) []byte {
 	l, err := level.String()
 	if err != nil {
