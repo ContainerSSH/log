@@ -2,10 +2,12 @@ package ljson
 
 import (
 	"encoding/json"
-	"github.com/containerssh/log"
 	"time"
+
+	"github.com/containerssh/log"
 )
 
+// Format a string message
 func (formatter *LogFormatter) Format(level log.Level, message string) []byte {
 	l, err := level.String()
 	if err != nil {
