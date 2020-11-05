@@ -17,6 +17,7 @@ func (formatter *LogFormatter) Format(level log.Level, message string) []byte {
 		Time:    time.Now().Format(time.RFC3339),
 		Level:   l,
 		Message: message,
+		Details: nil,
 	})
 	if err != nil {
 		panic(err)

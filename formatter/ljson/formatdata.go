@@ -16,6 +16,7 @@ func (formatter *LogFormatter) FormatData(level log.Level, data interface{}) []b
 	line, err := json.Marshal(JsonLine{
 		Time:    time.Now().Format(time.RFC3339),
 		Level:   l,
+		Message: "",
 		Details: data,
 	})
 	if err != nil {
