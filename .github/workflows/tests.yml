@@ -17,8 +17,7 @@ jobs:
         uses: golangci/golangci-lint-action@v2
         with:
           version: v1.29
-      - name: Run gofmt
-        run: gofmt -l .
+          args: --out-format=colored-line-number -E asciicheck -E bodyclose -E dupl -E errorlint -E exhaustive -E exhaustivestruct -E exportloopref -E funlen
       - name: Run go tests
         run: go test ./...
 
