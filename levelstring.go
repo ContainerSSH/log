@@ -17,6 +17,7 @@ const (
 	LevelEmergencyString LevelString = "emerg"
 )
 
+// ToLevel convert the string level to the int representation
 func (level LevelString) ToLevel() (Level, error) {
 	switch level {
 	case LevelDebugString:

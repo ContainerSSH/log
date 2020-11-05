@@ -2,15 +2,10 @@ package log
 
 // The logger interface provides logging facilities on various levesl
 type Logger interface {
-	// Change the minimum log level
 	SetLevel(level Level)
-	// Log a string message on debug level
 	Debug(message string)
-	// Log an error on debug level
 	Debuge(err error)
-	// Log a generic data on debug level
 	Debugd(data interface{})
-	// Log an Sprintf-style message with args on debug level
 	Debugf(format string, args ...interface{})
 	Info(message string)
 	Infoe(err error)

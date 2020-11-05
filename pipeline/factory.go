@@ -8,17 +8,20 @@ import (
 	"github.com/containerssh/log/formatter"
 )
 
+// Create a pipeline logger
 type LoggerPipelineFactory struct {
 	formatter formatter.Formatter
 	writer    io.Writer
 }
 
+// NewLoggerPipelineFactory Create a pipeline logger factory
 func NewLoggerPipelineFactory(formatter formatter.Formatter) factory.LoggerFactory {
 	return &LoggerPipelineFactory{
 		formatter: formatter,
 	}
 }
 
+// Create the pipeline
 func (f *LoggerPipelineFactory) Make(level log.Level) log.Logger {
 	return NewLoggerPipeline(
 		level,

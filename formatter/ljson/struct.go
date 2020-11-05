@@ -1,5 +1,5 @@
 package ljson
 
-// Newline-delimited JSON log formatter
+// LogFormatter newline-delimited JSON log formatter
 type LogFormatter struct {
 }
