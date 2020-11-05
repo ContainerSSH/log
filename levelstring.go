@@ -2,9 +2,10 @@ package log
 
 import "fmt"
 
-// swagger:enum LevelString
+// LevelString is a type for supported log level strings
 type LevelString string
 
+// List of valid string values for log levels
 const (
 	LevelDebugString     LevelString = "debug"
 	LevelInfoString      LevelString = "info"

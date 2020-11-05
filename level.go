@@ -4,9 +4,10 @@ import (
 	"fmt"
 )
 
-// swagger:enum Level
+// Level syslog-style log level identifiers
 type Level int8
 
+// Supported values for Level
 const (
 	LevelDebug     Level = 7
 	LevelInfo      Level = 6
@@ -40,6 +41,7 @@ func (level Level) String() (LevelString, error) {
 	return "", fmt.Errorf("invalid log level (%d)", level)
 }
 
+// Validate if the log level has a valid value
 func (level Level) Validate() error {
 	if level < LevelEmergency || level > LevelDebug {
 		return fmt.Errorf("invalid log level (%d)", level)
