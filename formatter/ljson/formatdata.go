@@ -22,5 +22,6 @@ func (formatter *LogFormatter) FormatData(level log.Level, data interface{}) []b
 	if err != nil {
 		panic(err)
 	}
+	line = append(line, '\n')
 	return line
 }

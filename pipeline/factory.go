@@ -15,9 +15,11 @@ type LoggerPipelineFactory struct {
 }
 
 // NewLoggerPipelineFactory Create a pipeline logger factory
-func NewLoggerPipelineFactory(formatter formatter.Formatter) factory.LoggerFactory {
+//goland:noinspection GoUnusedExportedFunction
+func NewLoggerPipelineFactory(formatter formatter.Formatter, writer io.Writer) factory.LoggerFactory {
 	return &LoggerPipelineFactory{
 		formatter: formatter,
+		writer:    writer,
 	}
 }
 
