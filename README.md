@@ -47,9 +47,16 @@ Each of these functions have the following 4 variants:
 
 In addition, the logger also provides a generic `Log(...interface{})` function for compatibility that logs in the `info` log level.
 
-## Using the logger
+## Creating logger
 
-This library also supplies a logger implementation called the pipeline logger and is implemented in [pipeline/pipeline.go](pipeline/pipeline.go). It can be used as follows:
+The simplest way to create a logger is to use the convenience functions:
+
+```go
+logger := standard.New()
+loggerFactory := standard.NewFactory()
+```
+
+You can also create a custom pipeline if you wish:
 
 ```go
 writer          := os.Stdout
@@ -59,6 +66,5 @@ p := pipeline.NewLoggerPipeline(minimumLogLevel, logFormatter, writer)
 p.Warning("test") 
 ```
 
-This will create a pipeline that writes log messages to the standard output in newline-delimited JSON format. You can,
-of course, also implement your own log formatter by implementing the interface in [formatter/formatter.go](formatter/formatter.go).
+This will create a pipeline that writes log messages to the standard output in newline-delimited JSON format. You can, of course, also implement your own log formatter by implementing the interface in [formatter/formatter.go](formatter/formatter.go).
 

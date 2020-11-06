@@ -4,7 +4,6 @@ import (
 	"io"
 
 	"github.com/containerssh/log"
-	"github.com/containerssh/log/factory"
 	"github.com/containerssh/log/formatter"
 )
 
@@ -16,7 +15,7 @@ type LoggerPipelineFactory struct {
 
 // NewLoggerPipelineFactory Create a pipeline logger factory
 //goland:noinspection GoUnusedExportedFunction
-func NewLoggerPipelineFactory(formatter formatter.Formatter, writer io.Writer) factory.LoggerFactory {
+func NewLoggerPipelineFactory(formatter formatter.Formatter, writer io.Writer) log.LoggerFactory {
 	return &LoggerPipelineFactory{
 		formatter: formatter,
 		writer:    writer,
