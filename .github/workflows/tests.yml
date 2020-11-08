@@ -13,11 +13,5 @@ jobs:
         uses: actions/setup-go@v2
         with:
           go-version: 1.14
-      - name: Run golangci-lint
-        uses: golangci/golangci-lint-action@v2
-        with:
-          version: v1.32.2
-          args: --out-format=colored-line-number -E asciicheck -E bodyclose -E dupl -E errorlint -E exhaustive -E exhaustivestruct -E exportloopref -E funlen
       - name: Run go tests
-        run: go test ./...
-
+        run: go test -cover -p 1 -v ./...
