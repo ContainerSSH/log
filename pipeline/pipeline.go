@@ -279,6 +279,12 @@ func (pipeline *LoggerPipeline) Debugf(format string, args ...interface{}) {
 
 // Log provides a generic log method that logs on the info level
 func (pipeline *LoggerPipeline) Log(args ...interface{}) {
+	if len(args) == 1 {
+		if arg, ok := args[0].(string); ok {
+			pipeline.write(log.LevelInfo, arg)
+			return
+		}
+	}
 	pipeline.writef(log.LevelInfo, "%v", args)
 }
 
