@@ -68,7 +68,7 @@ p.Warning("test")
 
 This will create a pipeline that writes log messages to the standard output in newline-delimited JSON format. You can, of course, also implement your own log formatter by implementing the interface in [formatter/formatter.go](formatter/formatter.go).
 
-## Plugging the go logger in
+## Plugging in the go logger
 
 This package also provides the facility to plug in the go logger. This can be done by creating a logger as follows:
 
