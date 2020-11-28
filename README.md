@@ -7,7 +7,7 @@
 [![LGTM Alerts](https://img.shields.io/lgtm/alerts/github/ContainerSSH/log?style=for-the-badge)](https://lgtm.com/projects/g/ContainerSSH/log/)
 
 
-This library provides internal logging for ContainerSSH. Its functionality is very similar to how syslog does logging.
+This library provides internal logging for ContainerSSH. Its functionality is very similar to how syslog is structured.
 
 <p align="center"><strong>Note: This is a developer documentation.</strong><br />The user documentation for ContainerSSH is located at <a href="https://containerssh.github.io">containerssh.github.io</a>.</p>
 
@@ -52,8 +52,16 @@ In addition, the logger also provides a generic `Log(...interface{})` function f
 The simplest way to create a logger is to use the convenience functions:
 
 ```go
-logger := standard.New()
-loggerFactory := standard.NewFactory()
+config := log.Config{
+    // Log levels are: Debug, Info, Notice, Warning, Error, Critical, Alert, Emergency
+    Level: log.LevelNotice,
+    // Supported formats: Text, LJSON
+    Format: log.FormatText,
+}
+// module is an optional module descriptor for log messages. Can be empty.
+module        := "someModule"
+logger        := log.New(config, module, os.Stdout)
+loggerFactory := log.NewFactory(os.Stdout)
 ```
 
 You can also create a custom pipeline if you wish:
@@ -61,18 +69,24 @@ You can also create a custom pipeline if you wish:
 ```go
 writer          := os.Stdout
 minimumLogLevel := log.LevelInfo
-logFormatter    := ljson.NewLJsonLogFormatter()
-p := pipeline.NewLoggerPipeline(minimumLogLevel, logFormatter, writer)
+logFormatter    := log.NewLJsonLogFormatter()
+module          := "someModule"
+p := pipeline.NewLoggerPipeline(minimumLogLevel, module, logFormatter, writer)
 p.Warning("test") 
 ```
 
-This will create a pipeline that writes log messages to the standard output in newline-delimited JSON format. You can, of course, also implement your own log formatter by implementing the interface in [formatter/formatter.go](formatter/formatter.go).
+This will create a pipeline that writes log messages to the standard output in newline-delimited JSON format. You can, of course, also implement your own log formatter by implementing the interface in [formatter.go](formatter.go).
 
 ## Plugging in the go logger
 
 This package also provides the facility to plug in the go logger. This can be done by creating a logger as follows:
 
 ```go
+import (
+  goLog "log"
+  "github.com/containerssh/log"
+)
+
 goLogWriter := log.NewGoLogWriter(logger)
 goLogger := goLog.New(goLogWriter, "", 0)
 goLogger.Println("Hello world!")
@@ -81,7 +95,13 @@ goLogger.Println("Hello world!")
 If you want to change the log facility globally:
 
 ```go
+import (
+  goLog "log"
+  "github.com/containerssh/log"
+)
+
 goLogWriter := log.NewGoLogWriter(logger)
-log.SetOutput(goLogWriter)
-log.Println("Hello world!")
+goLog.SetOutput(goLogWriter)
+goLog.Println("Hello world!")
 ```
+

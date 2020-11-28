@@ -2,6 +2,7 @@ package log
 
 // Logger The logger interface provides logging facilities on various levesl
 type Logger interface {
+	// SetLevel sets the logging level of the current logger.
 	SetLevel(level Level)
 	Debug(message string)
 	Debuge(err error)

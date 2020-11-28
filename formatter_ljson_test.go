@@ -1,4 +1,4 @@
-package ljson_test
+package log_test
 
 import (
 	"encoding/json"
@@ -7,12 +7,11 @@ import (
 	"github.com/stretchr/testify/assert"
 
 	"github.com/containerssh/log"
-	"github.com/containerssh/log/formatter/ljson"
 )
 
 func TestNewline(t *testing.T) {
-	formatter := ljson.NewLJsonLogFormatter()
-	message := formatter.Format(log.LevelDebug, "test")
+	formatter := log.NewLJsonLogFormatter()
+	message := formatter.Format(log.LevelDebug, "", "test")
 	data := map[string]interface{}{}
 	if err := json.Unmarshal(message, &data); err != nil {
 		assert.Fail(t, "failed to unmarshal message", err)

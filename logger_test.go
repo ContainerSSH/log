@@ -1,4 +1,4 @@
-package pipeline_test
+package log_test
 
 import (
 	"bufio"
@@ -6,11 +6,9 @@ import (
 	"encoding/json"
 	"testing"
 
-	"github.com/containerssh/log"
-	"github.com/containerssh/log/formatter/ljson"
-	"github.com/containerssh/log/pipeline"
-
 	"github.com/stretchr/testify/assert"
+
+	"github.com/containerssh/log"
 )
 
 func TestLogLevelFiltering(t *testing.T) {
@@ -26,7 +24,7 @@ func TestLogLevelFiltering(t *testing.T) {
 func testLevel(t *testing.T, logLevel log.Level, writeLogLevel log.Level) {
 	var buf bytes.Buffer
 	writer := bufio.NewWriter(&buf)
-	p := pipeline.NewLoggerPipeline(logLevel, ljson.NewLJsonLogFormatter(), writer)
+	p := log.NewLoggerPipeline(logLevel, "", log.NewLJsonLogFormatter(), writer)
 	switch writeLogLevel {
 	case log.LevelDebug:
 		p.Debug("test")
