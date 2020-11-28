@@ -1,5 +1,9 @@
 # Changelog
 
+## 0.9.4: Bugfixing text logging (November 28, 2020)
+
+This release adds the timestamp to the text format and documents both formats.
+
 ## 0.9.3: Adding Module Scoping (November 28, 2020)
 
 This release adds several improvements to the logging facilities:

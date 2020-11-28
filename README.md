@@ -105,3 +105,35 @@ goLog.SetOutput(goLogWriter)
 goLog.Println("Hello world!")
 ```
 
+## Log formats
+
+We currently support two log formats: `text` and `ljson`
+
+### The `text` format
+
+The text format is structured as follows:
+
+```
+TIMESTAMP[TAB]LEVEL[TAB]MODULE[TAB]MESSAGE[NEWLINE]
+```
+
+- `TIMESTAMP` is the timestamp of the message in RFC3339 format.
+- `LEVEL` is the level of the message (`debug`, `info`, `notice`, `warning`, `error`, `critical`, `alert`, `emergency`)
+- `MODULE` is the name of the module logged. May be empty.
+- `MESSAGE` is the text message or structured data logged.
+
+This format is recommended for human consumption only.
+
+### The `ljson` format
+
+This format logs in a newline-delimited JSON format. Each message has the following format:
+
+```json
+{"timestamp": "TIMESTAMP", "level": "LEVEL", "module": "MODULE", "message": "MESSAGE", "details": "DETAILS"}
+```
+
+- `TIMESTAMP` is the timestamp of the message in RFC3339 format.
+- `LEVEL` is the level of the message (`debug`, `info`, `notice`, `warning`, `error`, `critical`, `alert`, `emergency`)
+- `MODULE` is the name of the module logged. May be absent if not sent.
+- `MESSAGE` is the text message. May be absent if not set.
+- `DETAILS` is a structured log message. May be absent if not set.
