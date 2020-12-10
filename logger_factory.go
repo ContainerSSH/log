@@ -13,7 +13,6 @@ func NewLoggerPipelineFactory(writer io.Writer) LoggerFactory {
 }
 
 type loggerPipelineFactory struct {
-	formatter Formatter
 	writer    io.Writer
 }
 

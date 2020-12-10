@@ -1,5 +1,9 @@
 # Changelog
 
+## 0.9.5: YAML and JSON unmarshaling
+
+This release fixes the JSON and YAML unmarshalling, so it is compatible with the ContainerSSH 0.3 log format. 
+
 ## 0.9.4: Bugfixing text logging (November 28, 2020)
 
 This release adds the timestamp to the text format and documents both formats.
