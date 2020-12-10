@@ -1,6 +1,7 @@
 package log
 
 import (
+	"encoding/json"
 	"fmt"
 )
 
@@ -29,9 +30,37 @@ const (
 	LevelEmergency Level = 0
 )
 
+// UnmarshalJSON decodes a JSON level string to a level type.
+func (level *Level) UnmarshalJSON(data []byte) error {
+	var levelString LevelString
+	if err := json.Unmarshal(data, &levelString); err != nil {
+		return err
+	}
+	l, err := levelString.ToLevel()
+	if err != nil {
+		return err
+	}
+	*level = l
+	return nil
+}
+
+// UnmarshalYAML decodes a YAML level string to a level type.
+func (level *Level) UnmarshalYAML(unmarshal func(interface{}) error) error {
+	var levelString LevelString
+	if err := unmarshal(&levelString); err != nil {
+		return err
+	}
+	l, err := levelString.ToLevel()
+	if err != nil {
+		return err
+	}
+	*level = l
+	return nil
+}
+
 // String Convert the int level to the string representation
-func (level Level) String() (LevelString, error) {
-	switch level {
+func (level *Level) String() (LevelString, error) {
+	switch *level {
 	case LevelDebug:
 		return LevelDebugString, nil
 	case LevelInfo:
@@ -53,8 +82,8 @@ func (level Level) String() (LevelString, error) {
 }
 
 // Validate if the log level has a valid value
-func (level Level) Validate() error {
-	if level < LevelEmergency || level > LevelDebug {
+func (level *Level) Validate() error {
+	if *level < LevelEmergency || *level > LevelDebug {
 		return fmt.Errorf("invalid log level (%d)", level)
 	}
 	return nil
