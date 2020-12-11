@@ -2,6 +2,7 @@ package log
 
 import (
 	"encoding/json"
+	"errors"
 	"fmt"
 )
 
@@ -34,6 +35,15 @@ const (
 func (level *Level) UnmarshalJSON(data []byte) error {
 	var levelString LevelString
 	if err := json.Unmarshal(data, &levelString); err != nil {
+		unmarshalError := &json.UnmarshalTypeError{}
+		if errors.As(err, &unmarshalError) {
+			type levelAlias Level
+			var l levelAlias
+			if err = json.Unmarshal(data, &l); err != nil {
+				return err
+			}
+			*level = Level(l)
+		}
 		return err
 	}
 	l, err := levelString.ToLevel()
@@ -44,6 +54,15 @@ func (level *Level) UnmarshalJSON(data []byte) error {
 	return nil
 }
 
+// MarshalJSON marshals a level number to a JSON string
+func (level Level) MarshalJSON() ([]byte, error) {
+	levelString, err := level.String()
+	if err != nil {
+		return nil, err
+	}
+	return json.Marshal(levelString)
+}
+
 // UnmarshalYAML decodes a YAML level string to a level type.
 func (level *Level) UnmarshalYAML(unmarshal func(interface{}) error) error {
 	var levelString LevelString
@@ -52,10 +71,21 @@ func (level *Level) UnmarshalYAML(unmarshal func(interface{}) error) error {
 	}
 	l, err := levelString.ToLevel()
 	if err != nil {
-		return err
+		type levelAlias Level
+		var l2 levelAlias
+		if err2 := unmarshal(&l2); err2 != nil {
+			return err
+		}
+		*level = Level(l2)
+		return nil
 	}
 	*level = l
 	return nil
+}
+
+// MarshalYAML creates a YAML text representation from a numeric level
+func (level Level) MarshalYAML() (interface{}, error) {
+	return level.String()
 }
 
 // String Convert the int level to the string representation

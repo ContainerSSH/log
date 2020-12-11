@@ -1,6 +1,10 @@
 # Changelog
 
-## 0.9.5: YAML and JSON unmarshaling
+## 0.9.6: YAML and JSON marshalling
+
+In the previous release we did not consider the need for also marshalling log level values. This release adds the marshalling method to encode log levels to their string representations in YAML and JSON. It also adds the ability to unmarshal from the numeric values should they be present.
+
+## 0.9.5: YAML and JSON unmarshalling
 
 This release fixes the JSON and YAML unmarshalling, so it is compatible with the ContainerSSH 0.3 log format. 
 
