@@ -1,5 +1,9 @@
 # Changelog
 
+## 0.9.7: Default configuration values
+
+The previous version included an incorrect default value for the `level` setting. This is now fixed and defaults to the `notice` level.
+
 ## 0.9.6: YAML and JSON marshalling
 
 In the previous release we did not consider the need for also marshalling log level values. This release adds the marshalling method to encode log levels to their string representations in YAML and JSON. It also adds the ability to unmarshal from the numeric values should they be present.

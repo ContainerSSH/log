@@ -9,7 +9,7 @@ import (
 // Config describes the logging settings.
 type Config struct {
 	// Level describes the minimum level to log at
-	Level Level `json:"level" yaml:"level" default:"notice"`
+	Level Level `json:"level" yaml:"level" default:"5"`
 	// Format describes the log message format
 	Format Format `json:"format" yaml:"format" default:"ljson"`
 }
