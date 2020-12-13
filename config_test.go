@@ -4,6 +4,7 @@ import (
 	"encoding/json"
 	"testing"
 
+	"github.com/containerssh/structutils"
 	"github.com/stretchr/testify/assert"
 	"gopkg.in/yaml.v3"
 
@@ -74,4 +75,11 @@ func TestYAMLEncode(t *testing.T) {
 
 	assert.Equal(t, "debug", rawData["level"])
 	assert.Equal(t, "text", rawData["format"])
+}
+
+func TestDefault(t *testing.T) {
+	config := log.Config{}
+	structutils.Defaults(&config)
+	assert.Equal(t, log.LevelNotice, config.Level)
+	assert.Equal(t, log.FormatLJSON, config.Format)
 }
