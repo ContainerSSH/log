@@ -14,6 +14,17 @@ type Config struct {
 	Format Format `json:"format" yaml:"format" default:"ljson"`
 }
 
+// Validate validates the log configuration.
+func (c *Config) Validate() error {
+	if err := c.Level.Validate(); err != nil {
+		return err
+	}
+	if err := c.Format.Validate(); err != nil {
+		return err
+	}
+	return nil
+}
+
 // region Level
 
 // Level syslog-style log level identifiers

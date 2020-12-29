@@ -1,5 +1,9 @@
 # Changelog
 
+## 0.9.8: Added configuration validation
+
+This release adds a `Validate()` method to the configuration to allow for central validating the entire configuration structure before run.
+
 ## 0.9.7: Default configuration values
 
 The previous version included an incorrect default value for the `level` setting. This is now fixed and defaults to the `notice` level.
