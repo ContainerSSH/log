@@ -137,3 +137,11 @@ This format logs in a newline-delimited JSON format. Each message has the follow
 - `MODULE` is the name of the module logged. May be absent if not sent.
 - `MESSAGE` is the text message. May be absent if not set.
 - `DETAILS` is a structured log message. May be absent if not set.
+
+## Creating a logger for testing
+
+You can create a logger for testing purposes that logs using the `t *testing.T` log facility:
+
+```go
+logger := log.NewTestLogger(t)
+```

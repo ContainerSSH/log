@@ -1,5 +1,9 @@
 # Changelog
 
+## 0.9.9: Added test logger
+
+This release adds a test logger that helps with logging for tests.
+
 ## 0.9.8: Added configuration validation
 
 This release adds a `Validate()` method to the configuration to allow for central validating the entire configuration structure before run.
