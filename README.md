@@ -6,10 +6,9 @@
 [![Go Report Card](https://goreportcard.com/badge/github.com/containerssh/log?style=for-the-badge)](https://goreportcard.com/report/github.com/containerssh/log)
 [![LGTM Alerts](https://img.shields.io/lgtm/alerts/github/ContainerSSH/log?style=for-the-badge)](https://lgtm.com/projects/g/ContainerSSH/log/)
 
-
 This library provides internal logging for ContainerSSH. Its functionality is very similar to how syslog is structured.
 
-<p align="center"><strong>Note: This is a developer documentation.</strong><br />The user documentation for ContainerSSH is located at <a href="https://containerssh.github.io">containerssh.github.io</a>.</p>
+<p align="center"><strong>⚠⚠⚠ Warning: This is a developer documentation. ⚠⚠⚠</strong><br />The user documentation for ContainerSSH is located at <a href="https://containerssh.io">containerssh.io</a>.</p>
 
 ## Getting a logger
 
