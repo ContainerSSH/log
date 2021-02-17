@@ -83,6 +83,14 @@ msg := log.WrapError(
 
 Labels are useful for recording extra information with messages that can be indexed by the logging system. These labels may or may not be recorded by the logging backend. For example, the syslog output doesn't support recording labels due to size constraints. In other words, the message itself should contain enough information for an administrator to interpret the error. 
 
+You can add labels to messages like this:
+
+```go
+msg.Label("labelName", "labelValue")
+```
+
+**Hint:** `Label()` calls can be chained.
+
 ## Using messages
 
 As mentioned before, the `Message` interface implements the `error` interface, so these messages can simply be returned like a normal error would.
