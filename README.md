@@ -12,7 +12,7 @@ This library provides internal logging for ContainerSSH. Its functionality is ve
 
 ## Basic concept
 
-This is not the logger you would expect from the [go-log](https://github.com/go-log/log) library. This library combines the Go errors and the log messages into one. In other words, the `Message` object can be used both as an error and a log message.
+This is not the logger you would expect from the [go-log](https://github.com/go-log/log) library. This library combines the Go errors and the log messages into one. In other words, **the `Message` object can be used both as an error and a log message**.
 
 The main `Message` structure has several properties: a unique error code, a user-safe error message and a detailed error message for the system administrator. Additionally, it also may contain several key-value pairs called labels to convey additional information.
 
@@ -20,7 +20,7 @@ The main `Message` structure has several properties: a unique error code, a user
 
 If you want to create a message you can use the following methods:
 
-### `log.NewMessage`
+### `log.NewMessage()`
 
 The `log.NewMessage` method creates a new `Message` structure as follows:
 
@@ -38,9 +38,9 @@ msg := log.NewMessage(
 - The third parameter is a string that can be logged for the system administrator. It can contain `fmt.Sprintf`-style formatting characters.
 - All subsequent parameters are used to replace the formatting characters.
 
-### `log.Error`
+### `log.Error()`
 
-The `log.Error` method is a simplified version of `log.NewMessage` without the user-facing message. The user-facing message will always be `Internal Error.`. The method signature is the following:
+The `log.Error()` method is a simplified version of `log.NewMessage()` without the user-facing message. The user-facing message will always be `Internal Error.`. The method signature is the following:
 
 ```go
 msg := log.NewMessage(
@@ -50,9 +50,9 @@ msg := log.NewMessage(
 )
 ```
 
-### `log.Wrap`
+### `log.Wrap()`
 
-The `log.Wrap` method can be used to create a wrapped error. It automatically appends the original error message to the administrator-facing message. The function signature is the following:
+The `log.Wrap()` method can be used to create a wrapped error. It automatically appends the original error message to the administrator-facing message. The function signature is the following:
 
 ```go
 msg := log.Wrap(
@@ -65,9 +65,9 @@ msg := log.Wrap(
 )
 ```
 
-### `log.WrapError`
+### `log.WrapError()`
 
-Like the `log.Error` method the `log.WrapError` will skip the user-visible error message and otherwise be identical to `log.Wrap`.
+Like the `log.Error()` method the `log.WrapError()` will skip the user-visible error message and otherwise be identical to `log.Wrap()`.
 
 ```go
 msg := log.WrapError(
