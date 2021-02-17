@@ -43,7 +43,7 @@ msg := log.NewMessage(
 The `log.Error()` method is a simplified version of `log.NewMessage()` without the user-facing message. The user-facing message will always be `Internal Error.`. The method signature is the following:
 
 ```go
-msg := log.NewMessage(
+msg := log.Error(
     "E_SOME_ERROR_CODE",
     "Details about the error (%s)",
     "Some string that will end up instead of %s."
