@@ -1,9 +1,9 @@
 package log_test
 
 import (
-	"bufio"
 	"bytes"
 	"encoding/json"
+	"fmt"
 	"testing"
 
 	"github.com/stretchr/testify/assert"
@@ -13,39 +13,47 @@ import (
 
 func TestLogLevelFiltering(t *testing.T) {
 	for logLevelInt := 0; logLevelInt < 8; logLevelInt++ {
-		for writeLogLevelInt := 0; writeLogLevelInt < 8; writeLogLevelInt++ {
-			logLevel := log.Level(logLevelInt)
-			writeLogLevel := log.Level(writeLogLevelInt)
-			testLevel(t, logLevel, writeLogLevel)
-		}
+		t.Run(fmt.Sprintf("filter=%s", log.Level(logLevelInt).MustName()), func(t *testing.T) {
+			for writeLogLevelInt := 0; writeLogLevelInt < 8; writeLogLevelInt++ {
+				logLevel := log.Level(logLevelInt)
+				writeLogLevel := log.Level(writeLogLevelInt)
+				t.Run(
+					fmt.Sprintf("write=%s", log.Level(writeLogLevelInt).MustName()),
+					func(t *testing.T) {
+						testLevel(t, logLevel, writeLogLevel)
+					},
+				)
+			}
+		})
 	}
 }
 
 func testLevel(t *testing.T, logLevel log.Level, writeLogLevel log.Level) {
 	var buf bytes.Buffer
-	writer := bufio.NewWriter(&buf)
-	p := log.NewLoggerPipeline(logLevel, "", log.NewLJsonLogFormatter(), writer)
+	p := log.MustNewLogger(log.Config{
+		Level:  logLevel,
+		Format: log.FormatLJSON,
+		Output: log.OutputStdout,
+		Stdout: &buf,
+	})
+	message := log.NewMessage("E_TEST", "test", "test")
 	switch writeLogLevel {
 	case log.LevelDebug:
-		p.Debug("test")
+		p.Debug(message)
 	case log.LevelInfo:
-		p.Info("test")
+		p.Info(message)
 	case log.LevelNotice:
-		p.Notice("test")
+		p.Notice(message)
 	case log.LevelWarning:
-		p.Warning("test")
+		p.Warning(message)
 	case log.LevelError:
-		p.Error("test")
+		p.Error(message)
 	case log.LevelCritical:
-		p.Critical("test")
+		p.Critical(message)
 	case log.LevelAlert:
-		p.Alert("test")
+		p.Alert(message)
 	case log.LevelEmergency:
-		p.Emergency("test")
-	}
-
-	if err := writer.Flush(); err != nil {
-		assert.Fail(t, "failed to flush writer", err)
+		p.Emergency(message)
 	}
 	if logLevel < writeLogLevel {
 		assert.Equal(t, 0, buf.Len())
@@ -58,7 +66,7 @@ func testLevel(t *testing.T, logLevel log.Level, writeLogLevel log.Level) {
 			assert.Fail(t, "failed to unmarshal JSON from writer", err)
 		}
 
-		expectedLevel, _ := writeLogLevel.String()
+		expectedLevel := writeLogLevel.String()
 		assert.Equal(t, string(expectedLevel), data["level"])
 		assert.Equal(t, "test", data["message"])
 	}
