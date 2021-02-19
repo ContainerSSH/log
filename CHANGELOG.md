@@ -1,5 +1,11 @@
 # Changelog
 
+## 0.9.10: Moved to struct-based logging
+
+- Added a new error type called `Message` as a preferred way of generating errors.
+- Removed error methods, such as `Noticee`, etc
+- Added labels to messages and loggers
+
 ## 0.9.9: Added test logger
 
 This release adds a test logger that helps with logging for tests.
@@ -116,5 +122,5 @@ p := pipeline.NewLoggerPipeline(minimumLogLevel, logFormatter, writer)
 p.Warning("test") 
 ```
 
-This will create a pipeline that writes log messages to the standard output in newline-delimited JSON format. You can, of course, also implement your own log formatter by implementing the interface in [formatter.go](formatter.go).
+This will create a pipeline that writes log messages to the standard output in newline-delimited JSON format.
 

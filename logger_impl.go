@@ -41,12 +41,25 @@ func (pipeline *logger) WithLabel(labelName LabelName, labelValue LabelValue) Lo
 
 //region Format
 
-func (pipeline *logger) write(level Level, err error) {
+func (pipeline *logger) write(level Level, message ...interface{}) {
 	if pipeline.level >= level {
+		if len(message) == 0 {
+			return
+		}
 		var msg Message
-		var ok bool
-		if msg, ok = err.(Message); !ok {
-			msg = pipeline.wrapError(err)
+		if len(message) == 1 {
+			switch message[0].(type) {
+			case Message:
+				msg = message[0].(Message)
+			case error:
+				msg = pipeline.wrapError(message[0].(error))
+			case string:
+				msg = NewMessage(EUnknownError, message[0].(string))
+			default:
+				msg = NewMessage(EUnknownError, "%v", message[0])
+			}
+		} else {
+			msg = NewMessage(EUnknownError, "%v", message)
 		}
 
 		for label, value := range pipeline.labels {
@@ -59,8 +72,24 @@ func (pipeline *logger) write(level Level, err error) {
 	}
 }
 
+func (pipeline *logger) writef(level Level, format string, args ...interface{}) {
+	if pipeline.level >= level {
+		var msg Message
+
+		msg = NewMessage(EUnknownError, format, args...)
+
+		for label, value := range pipeline.labels {
+			msg = msg.Label(label, value)
+		}
+
+		if err := pipeline.writer.Write(level, msg); err != nil {
+			panic(err)
+		}
+	}
+}
+
 func (pipeline *logger) wrapError(err error) Message {
-	return WrapError(
+	return Wrap(
 		err,
 		EUnknownError,
 		"An unexpected error has happened.",
@@ -71,44 +100,60 @@ func (pipeline *logger) wrapError(err error) Message {
 
 //region Messages
 
-// Emergency writes a string message on the emergency level
-func (pipeline *logger) Emergency(err error) {
-	pipeline.write(LevelEmergency, err)
+func (pipeline *logger) Emergency(message ...interface{}) {
+	pipeline.write(LevelEmergency, message)
+}
+func (pipeline *logger) Emergencyf(format string, args ...interface{}) {
+	pipeline.writef(LevelEmergency, format, args)
 }
 
-// Alert writes a string message on the alert level
-func (pipeline *logger) Alert(err error) {
-	pipeline.write(LevelAlert, err)
+func (pipeline *logger) Alert(message ...interface{}) {
+	pipeline.write(LevelAlert, message)
+}
+func (pipeline *logger) Alertf(format string, args ...interface{}) {
+	pipeline.writef(LevelAlert, format, args)
 }
 
-// Critical writes a string message on the critical level
-func (pipeline *logger) Critical(err error) {
-	pipeline.write(LevelCritical, err)
+func (pipeline *logger) Critical(message ...interface{}) {
+	pipeline.write(LevelCritical, message)
+}
+func (pipeline *logger) Criticalf(format string, args ...interface{}) {
+	pipeline.writef(LevelCritical, format, args)
 }
 
-// Error writes a string message on the error level
-func (pipeline *logger) Error(err error) {
-	pipeline.write(LevelError, err)
+func (pipeline *logger) Error(message ...interface{}) {
+	pipeline.write(LevelError, message)
+}
+func (pipeline *logger) Errorf(format string, args ...interface{}) {
+	pipeline.writef(LevelError, format, args)
 }
 
-// Warning writes a string message on the warning level
-func (pipeline *logger) Warning(err error) {
-	pipeline.write(LevelWarning, err)
+func (pipeline *logger) Warning(message ...interface{}) {
+	pipeline.write(LevelWarning, message)
+}
+func (pipeline *logger) Warningf(format string, args ...interface{}) {
+	pipeline.writef(LevelWarning, format, args)
 }
 
-// Notice writes a string message on the notice level
-func (pipeline *logger) Notice(err error) {
-	pipeline.write(LevelNotice, err)
+func (pipeline *logger) Notice(message ...interface{}) {
+	pipeline.write(LevelNotice, message)
+}
+func (pipeline *logger) Noticef(format string, args ...interface{}) {
+	pipeline.writef(LevelNotice, format, args)
 }
 
-// Info writes a string message on the info level
-func (pipeline *logger) Info(err error) {
-	pipeline.write(LevelInfo, err)
+func (pipeline *logger) Info(message ...interface{}) {
+	pipeline.write(LevelInfo, message)
+}
+func (pipeline *logger) Infof(format string, args ...interface{}) {
+	pipeline.writef(LevelInfo, format, args)
 }
 
-// Debug writes a string message on the debug level
-func (pipeline *logger) Debug(err error) {
-	pipeline.write(LevelDebug, err)
+func (pipeline *logger) Debug(message ...interface{}) {
+	pipeline.write(LevelDebug, message)
+}
+func (pipeline *logger) Debugf(format string, args ...interface{}) {
+	pipeline.writef(LevelDebug, format, args)
 }
 
 //endregion

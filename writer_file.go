@@ -34,7 +34,7 @@ func (f *fileWriter) Rotate() error {
 	defer f.lock.Unlock()
 	fh, err := openLogFile(f.filename)
 	if err != nil {
-		return WrapError(
+		return Wrap(
 			err,
 			ELogRotateFailed,
 			"failed to rotate logs",
@@ -44,7 +44,7 @@ func (f *fileWriter) Rotate() error {
 	f.fh = fh
 	f.fileHandleWriter.fh = fh
 	if err := oldFh.Close(); err != nil {
-		return WrapError(
+		return Wrap(
 			err,
 			ELogRotateFailed,
 			"failed to close old log file",
@@ -60,7 +60,7 @@ func (f *fileWriter) Close() error {
 func openLogFile(filename string) (*os.File, error) {
 	fh, err := os.OpenFile(filename, os.O_CREATE&os.O_APPEND, 0644)
 	if err != nil {
-		return nil, WrapError(err, ELogFileOpenFailed, "failed to open log file %s", filename)
+		return nil, Wrap(err, ELogFileOpenFailed, "failed to open log file %s", filename)
 	}
 	return fh, nil
 }

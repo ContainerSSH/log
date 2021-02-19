@@ -4,9 +4,9 @@ import (
 	"testing"
 )
 
-// GetTestLogger creates a logger for testing purposes.
+// NewTestLogger creates a logger for testing purposes.
 //goland:noinspection GoUnusedExportedFunction
-func GetTestLogger(t *testing.T) Logger {
+func NewTestLogger(t *testing.T) Logger {
 	logger, err := NewLogger(
 		Config{
 			Level:  LevelDebug,

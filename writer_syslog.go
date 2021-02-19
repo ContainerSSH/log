@@ -48,7 +48,7 @@ func (s *syslogWriter) Write(level Level, message Message) error {
 	msg := message.Explanation()
 	line := fmt.Sprintf("<%d>%s %s %s: %s\n", pri, timestamp, s.config.hostname, tag, msg)
 	if _, err = s.connection.Write([]byte(line)); err != nil {
-		return WrapError(err, ELogWriteFailed, "failed to write to syslog socket")
+		return Wrap(err, ELogWriteFailed, "failed to write to syslog socket")
 	}
 	return nil
 }
@@ -60,7 +60,7 @@ func (s *syslogWriter) Rotate() error {
 		return err
 	}
 	if err := s.connection.Close(); err != nil {
-		return WrapError(err, ELogRotateFailed, "failed to close old syslog connection")
+		return Wrap(err, ELogRotateFailed, "failed to close old syslog connection")
 	}
 	s.connection = s.config.connection
 	return nil

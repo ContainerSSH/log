@@ -20,12 +20,12 @@ The main `Message` structure has several properties: a unique error code, a user
 
 If you want to create a message you can use the following methods:
 
-### `log.NewMessage()`
+### `log.UserMessage()`
 
-The `log.NewMessage` method creates a new `Message` structure as follows:
+The `log.UserMessage` method creates a new `Message` with a user-facing message structure as follows:
 
 ```go
-msg := log.NewMessage(
+msg := log.UserMessage(
     "E_SOME_ERROR_CODE",
     "Dear user, an internal error happened.",
     "Details about the error (%s)",
@@ -38,24 +38,24 @@ msg := log.NewMessage(
 - The third parameter is a string that can be logged for the system administrator. It can contain `fmt.Sprintf`-style formatting characters.
 - All subsequent parameters are used to replace the formatting characters.
 
-### `log.Error()`
+### `log.NewMessage()`
 
-The `log.Error()` method is a simplified version of `log.NewMessage()` without the user-facing message. The user-facing message will always be `Internal Error.`. The method signature is the following:
+The `log.NewMessage()` method is a simplified version of `log.UserMessage()` without the user-facing message. The user-facing message will always be `Internal Error.`. The method signature is the following:
 
 ```go
-msg := log.Error(
+msg := log.NewMessage(
     "E_SOME_ERROR_CODE",
     "Details about the error (%s)",
     "Some string that will end up instead of %s."
 )
 ```
 
-### `log.Wrap()`
+### `log.WrapUser()`
 
-The `log.Wrap()` method can be used to create a wrapped error. It automatically appends the original error message to the administrator-facing message. The function signature is the following:
+The `log.WrapUser()` method can be used to create a wrapped error with a user-facing message. It automatically appends the original error message to the administrator-facing message. The function signature is the following:
 
 ```go
-msg := log.Wrap(
+msg := log.WrapUser(
     originalErr,
     "E_SOME_CODE",
     "Dear user, some error happened."
@@ -65,12 +65,12 @@ msg := log.Wrap(
 )
 ```
 
-### `log.WrapError()`
+### `log.Wrap()`
 
-Like the `log.Error()` method the `log.WrapError()` will skip the user-visible error message and otherwise be identical to `log.Wrap()`.
+Like the `log.WrapUser()` method the `log.Wrap()` will skip the user-visible error message and otherwise be identical to `log.Wrap()`.
 
 ```go
-msg := log.WrapError(
+msg := log.Wrap(
     originalErr,
     "E_SOME_CODE",
     "Dear admin, an error happened. %s" + 
@@ -97,18 +97,26 @@ As mentioned before, the `Message` interface implements the `error` interface, s
 
 ## Logging
 
-This library also provides a `Logger` interface that can log all kinds of errors, including the `Message` interface. It provides the following methods for logging:
+This library also provides a `Logger` interface that can log all kinds of messages and errors, including the `Message` interface. It provides the following methods for logging:
 
-- `logger.Debug(err)`
-- `logger.Info(err)`
-- `logger.Notice(err)`
-- `logger.Warning(err)`
-- `logger.Error(err)`
-- `logger.Critical(err)`
-- `logger.Alert(err)`
-- `logger.Emergency(err)`
+- `logger.Debug(message ...interface{})`
+- `logger.Debugf(format string, args ...interface{})`
+- `logger.Info(message ...interface{})`
+- `logger.Infof(format string, args ...interface{})`
+- `logger.Notice(message ...interface{})`
+- `logger.Noticef(format string, args ...interface{})`
+- `logger.Warning(message ...interface{})`
+- `logger.Warningf(format string, args ...interface{})`
+- `logger.Error(message ...interface{})`
+- `logger.Errorf(format string, args ...interface{})`
+- `logger.Critical(message ...interface{})`
+- `logger.Criticalf(format string, args ...interface{})`
+- `logger.Alert(message ...interface{})`
+- `logger.Alertf(format string, args ...interface{})`
+- `logger.Emergency(message ...interface{})`
+- `logger.Emergencyf(format string, args ...interface{})`
 
-We also provide the following compatibility methods:
+We also provide the following compatibility methods which log at the info level.
 
 - `logger.Log(v ...interface{})`
 - `logger.Logf(format string, v ...interface{})`

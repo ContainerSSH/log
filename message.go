@@ -6,14 +6,14 @@ import (
 
 //region Factories
 
-// NewMessage constructs a Message.
+// UserMessage constructs a Message.
 //
 // - Code is an error code allowing an administrator to identify the error that happened.
 // - UserMessage is the message that can be printed to the user if needed.
 // - Explanation is the explanation string to the system administrator. This is an fmt.Sprintf-compatible string
 // - Args are the arguments to Explanation to create a formatted message. It is recommended that these arguments also
 //   be added as labels to allow system administrators to index the error properly.
-func NewMessage(Code string, UserMessage string, Explanation string, Args ...interface{}) Message {
+func UserMessage(Code string, UserMessage string, Explanation string, Args ...interface{}) Message {
 	return &message{
 		code:        Code,
 		userMessage: UserMessage,
@@ -22,7 +22,7 @@ func NewMessage(Code string, UserMessage string, Explanation string, Args ...int
 	}
 }
 
-// Wrap creates a Message wrapping an error.
+// WrapUser creates a Message wrapping an error with a user-facing message.
 //
 // - Cause is the original error that can be accessed with the Unwrap method.
 // - Code is an error code allowing an administrator to identify the error that happened.
@@ -30,39 +30,39 @@ func NewMessage(Code string, UserMessage string, Explanation string, Args ...int
 // - Explanation is the explanation string to the system administrator. This is an fmt.Sprintf-compatible string
 // - Args are the arguments to Explanation to create a formatted message. It is recommended that these arguments also
 //   be added as labels to allow system administrators to index the error properly.
-func Wrap(Cause error, Code string, UserMessage string, Explanation string, Args ...interface{}) WrappingMessage {
+func WrapUser(Cause error, Code string, User string, Explanation string, Args ...interface{}) WrappingMessage {
 	return &wrappingMessage{
-		Message: NewMessage(Code, UserMessage, Explanation, Args...),
+		Message: UserMessage(Code, User, Explanation, Args...),
 		cause:   Cause,
 	}
 }
 
-// Error creates an internal error with only the explanation for the administrator inserted.
+// NewMessage creates an internal error with only the explanation for the administrator inserted.
 //
 // - Code is an error code allowing an administrator to identify the error that happened.
 // - Explanation is the explanation string to the system administrator. This is an fmt.Sprintf-compatible string
 // - Args are the arguments to Explanation to create a formatted message. It is recommended that these arguments also
 //   be added as labels to allow system administrators to index the error properly.
-func Error(Code string, Explanation string, Args ...interface{}) Message {
-	return NewMessage(
+func NewMessage(Code string, Explanation string, Args ...interface{}) Message {
+	return UserMessage(
 		Code,
-		"Internal Error",
+		"Internal NewMessage",
 		Explanation,
 		Args...,
 	)
 }
 
-// WrapError creates a wrapped error with a specific Code and Explanation string. The wrapping method will automatically
-//           append the error message in brackets.
+// Wrap creates a wrapped error with a specific Code and Explanation string. The wrapping method will automatically
+//      append the error message in brackets.
 //
 // - Cause is the original error that can be accessed with the Unwrap method.
 // - Code is an error code allowing an administrator to identify the error that happened.
 // - Explanation is the explanation string to the system administrator. This is an fmt.Sprintf-compatible string
 // - Args are the arguments to Explanation to create a formatted message. It is recommended that these arguments also
 //   be added as labels to allow system administrators to index the error properly.
-func WrapError(Cause error, Code string, Explanation string, Args ...interface{}) WrappingMessage {
+func Wrap(Cause error, Code string, Explanation string, Args ...interface{}) WrappingMessage {
 	return &wrappingMessage{
-		Message: Error(Code, Explanation+" (%v)", append(Args, Cause)...),
+		Message: NewMessage(Code, Explanation+" (%v)", append(Args, Cause)...),
 		cause:   Cause,
 	}
 }
@@ -72,9 +72,9 @@ func WrapError(Cause error, Code string, Explanation string, Args ...interface{}
 //region Interfaces
 
 // Message is a message structure for error reporting in ContainerSSH. The actual implementations may differ, but we
-// provide the NewMessage method to construct a message that conforms to this interface.
+// provide the UserMessage method to construct a message that conforms to this interface.
 type Message interface {
-	// Error is the Go-compatible error message.
+	// NewMessage is the Go-compatible error message.
 	Error() string
 	// String returns the string representation of this message.
 	String() string

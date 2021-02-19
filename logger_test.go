@@ -36,7 +36,7 @@ func testLevel(t *testing.T, logLevel log.Level, writeLogLevel log.Level) {
 		Output: log.OutputStdout,
 		Stdout: &buf,
 	})
-	message := log.NewMessage("E_TEST", "test", "test")
+	message := log.UserMessage("E_TEST", "test", "test")
 	switch writeLogLevel {
 	case log.LevelDebug:
 		p.Debug(message)

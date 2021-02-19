@@ -28,10 +28,10 @@ func (f *fileHandleWriter) Write(level Level, message Message) error {
 	levelString, err := level.Name()
 	line, err := f.createLine(levelString, message)
 	if err != nil {
-		return WrapError(err, ELogWriteFailed, "failed to write log message")
+		return Wrap(err, ELogWriteFailed, "failed to write log message")
 	}
 	if _, err := f.fh.Write(line); err != nil {
-		return WrapError(err, ELogWriteFailed, "failed to write log message")
+		return Wrap(err, ELogWriteFailed, "failed to write log message")
 	}
 	return nil
 }
