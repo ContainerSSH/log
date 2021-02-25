@@ -1,5 +1,11 @@
 # Changelog
 
+## 0.9.11: Log cleanup
+
+This release cleans up the output format. It also deprecates the formatting messages, such as `Noticef` in favor of logging `Message` objects.
+
+It also adds multi-format support to and fixes the Syslog writer.
+
 ## 0.9.10: Moved to struct-based logging
 
 - Added a new error type called `Message` as a preferred way of generating errors.

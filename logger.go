@@ -19,41 +19,49 @@ type Logger interface {
 	// Debug logs a message at the debug level.
 	Debug(message ...interface{})
 	// Debugf logs a message at the debug level with a formatting string.
+	// Deprecated: use Debug with a Message instead.
 	Debugf(format string, args ...interface{})
 
 	// Info logs a message at the info level.
 	Info(message ...interface{})
 	// Infof logs a message at the info level with a formatting string.
+	// Deprecated: use Info with a Message instead.
 	Infof(format string, args ...interface{})
 
 	// Notice logs a message at the notice level.
 	Notice(message ...interface{})
 	// Noticef logs a message at the notice level with a formatting string.
+	// Deprecated: use Notice with a Message instead.
 	Noticef(format string, args ...interface{})
 
 	// Warning logs a message at the warning level.
 	Warning(message ...interface{})
 	// Warningf logs a message at the warning level with a formatting string.
+	// Deprecated: use Warning with a Message instead.
 	Warningf(format string, args ...interface{})
 
 	// Error logs a message at the error level.
 	Error(message ...interface{})
 	// Errorf logs a message at the error level with a formatting string.
+	// Deprecated: use Error with a Message instead.
 	Errorf(format string, args ...interface{})
 
 	// Critical logs a message at the critical level.
 	Critical(message ...interface{})
 	// Criticalf logs a message at the critical level with a formatting string.
+	// Deprecated: use Critical with a Message instead.
 	Criticalf(format string, args ...interface{})
 
 	// Alert logs a message at the alert level.
 	Alert(message ...interface{})
 	// Alertf logs a message at the alert level with a formatting string
+	// Deprecated: use Alert with a Message instead.
 	Alertf(format string, args ...interface{})
 
 	// Emergency logs a message at the emergency level.
 	Emergency(message ...interface{})
 	// Emergencyf logs a message at the emergency level with a formatting string.
+	// Deprecated: use Emergency with a Message instead.
 	Emergencyf(format string, message ...interface{})
 
 	// Log logs a number of objects or strings to the log.

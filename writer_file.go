@@ -30,6 +30,7 @@ type fileWriter struct {
 }
 
 func (f *fileWriter) Rotate() error {
+
 	f.lock.Lock()
 	defer f.lock.Unlock()
 	fh, err := openLogFile(f.filename)
@@ -58,7 +59,7 @@ func (f *fileWriter) Close() error {
 }
 
 func openLogFile(filename string) (*os.File, error) {
-	fh, err := os.OpenFile(filename, os.O_CREATE&os.O_APPEND, 0644)
+	fh, err := os.OpenFile(filename, os.O_RDWR|os.O_CREATE|os.O_APPEND, 0644)
 	if err != nil {
 		return nil, Wrap(err, ELogFileOpenFailed, "failed to open log file %s", filename)
 	}

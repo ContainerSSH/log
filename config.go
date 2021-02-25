@@ -6,7 +6,6 @@ import (
 	"fmt"
 	"io"
 	"net"
-	"os"
 	"strings"
 	"testing"
 )
@@ -496,8 +495,6 @@ var nameToFacility = map[FacilityString]Facility{
 type SyslogConfig struct {
 	// Destination is the socket to send logs to. Can be a local path to unix sockets as well as UDP destinations.
 	Destination string `json:"destination" yaml:"destination" default:"/dev/log"`
-	// Hostname is the host name to write in the syslog message. If empty, defaults to the current hostname.
-	Hostname string `json:"hostname" yaml:"hostname"`
 	// Facility logs to the specified syslog facility.
 	Facility FacilityString `json:"facility" yaml:"facility" default:"auth"`
 	// Tag is the syslog tag to log with.
@@ -509,8 +506,6 @@ type SyslogConfig struct {
 	connection net.Conn
 	// tag is the real syslog tag for the message
 	tag string
-	// hostname is the name of the host sending the log message.
-	hostname string
 }
 
 // Validate validates the syslog configuration
@@ -519,19 +514,13 @@ func (c *SyslogConfig) Validate() error {
 	if c.Destination != "" {
 		destination = c.Destination
 	}
-	if c.Hostname == "" {
-		hostname, err := os.Hostname()
-		if err != nil {
-			return fmt.Errorf("failed to obtain host name (%w)", err)
-		}
-		c.hostname = hostname
-	} else {
-		c.hostname = c.Hostname
-	}
 	if strings.HasPrefix(c.Destination, "/") {
 		connection, err := net.Dial("unix", destination)
 		if err != nil {
-			return fmt.Errorf("failed to open UNIX socket to %s (%w)", c.Destination, err)
+			connection, err = net.Dial("unixgram", destination)
+			if err != nil {
+				return fmt.Errorf("failed to open UNIX socket to %s (%w)", c.Destination, err)
+			}
 		}
 		c.connection = connection
 	} else {

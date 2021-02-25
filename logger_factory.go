@@ -67,7 +67,7 @@ func (f *loggerFactory) Make(config Config) (Logger, error) {
 		}
 		writer, err = newStdoutWriter(stdout, config.Format)
 	case OutputSyslog:
-		writer, err = newSyslogWriter(config.Syslog)
+		writer, err = newSyslogWriter(config.Syslog, config.Format)
 	case OutputTest:
 		writer = newGoTest(config.T)
 	}

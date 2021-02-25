@@ -1,14 +1,16 @@
 package log
 
 import (
+	"encoding/json"
 	"fmt"
 	"net"
 	"os"
+	"strings"
 	"sync"
 	"time"
 )
 
-func newSyslogWriter(config SyslogConfig) (Writer, error) {
+func newSyslogWriter(config SyslogConfig, format Format) (Writer, error) {
 	if err := config.Validate(); err != nil {
 		return nil, err
 	}
@@ -16,6 +18,7 @@ func newSyslogWriter(config SyslogConfig) (Writer, error) {
 		lock:       &sync.Mutex{},
 		connection: config.connection,
 		config:     config,
+		format:     format,
 	}, nil
 }
 
@@ -23,6 +26,7 @@ type syslogWriter struct {
 	connection net.Conn
 	config     SyslogConfig
 	lock       *sync.Mutex
+	format     Format
 }
 
 func (s *syslogWriter) Write(level Level, message Message) error {
@@ -45,12 +49,54 @@ func (s *syslogWriter) Write(level Level, message Message) error {
 	if s.config.Pid {
 		tag += fmt.Sprintf("[%d]", os.Getpid())
 	}
-	msg := message.Explanation()
-	line := fmt.Sprintf("<%d>%s %s %s: %s\n", pri, timestamp, s.config.hostname, tag, msg)
+	msg, err := s.createMessage(message)
+	if err != nil {
+		return err
+	}
+	line := fmt.Sprintf("<%d>%s %s: %s\n", pri, timestamp, tag, msg)
 	if _, err = s.connection.Write([]byte(line)); err != nil {
 		return Wrap(err, ELogWriteFailed, "failed to write to syslog socket")
 	}
 	return nil
+}
+
+func (s *syslogWriter) createMessage(message Message) (line []byte, err error) {
+	switch s.format {
+	case FormatLJSON:
+		details := map[string]interface{}{}
+		for label, value := range message.Labels() {
+			details[string(label)] = value
+		}
+		line, err = json.Marshal(
+			syslogJsonLine{
+				Code:    message.Code(),
+				Message: message.Explanation(),
+				Details: details,
+			},
+		)
+		if err != nil {
+			return nil, err
+		}
+	case FormatText:
+		msg := message.Explanation()
+		var labels []string
+		for labelName, labelValue := range message.Labels() {
+			labels = append(labels, fmt.Sprintf("%s=%s", labelName, labelValue))
+		}
+		if len(labels) > 0 {
+			msg += fmt.Sprintf(" (%s)", strings.Join(labels, " "))
+		}
+		line = []byte(msg)
+	default:
+		return nil, fmt.Errorf("log format not supported: %s", s.format)
+	}
+	return line, nil
+}
+
+type syslogJsonLine struct {
+	Code    string                 `json:"code"`
+	Message string                 `json:"message"`
+	Details map[string]interface{} `json:"details"`
 }
 
 func (s *syslogWriter) Rotate() error {

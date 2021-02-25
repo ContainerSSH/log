@@ -100,21 +100,15 @@ As mentioned before, the `Message` interface implements the `error` interface, s
 This library also provides a `Logger` interface that can log all kinds of messages and errors, including the `Message` interface. It provides the following methods for logging:
 
 - `logger.Debug(message ...interface{})`
-- `logger.Debugf(format string, args ...interface{})`
 - `logger.Info(message ...interface{})`
-- `logger.Infof(format string, args ...interface{})`
 - `logger.Notice(message ...interface{})`
-- `logger.Noticef(format string, args ...interface{})`
 - `logger.Warning(message ...interface{})`
-- `logger.Warningf(format string, args ...interface{})`
 - `logger.Error(message ...interface{})`
-- `logger.Errorf(format string, args ...interface{})`
 - `logger.Critical(message ...interface{})`
-- `logger.Criticalf(format string, args ...interface{})`
 - `logger.Alert(message ...interface{})`
-- `logger.Alertf(format string, args ...interface{})`
 - `logger.Emergency(message ...interface{})`
-- `logger.Emergencyf(format string, args ...interface{})`
+
+You are encouraged to pass a `Message` implementation to it. 
 
 We also provide the following compatibility methods which log at the info level.
 
