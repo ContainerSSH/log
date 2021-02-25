@@ -27,6 +27,9 @@ func (f *fileHandleWriter) Write(level Level, message Message) error {
 	f.lock.Lock()
 	defer f.lock.Unlock()
 	levelString, err := level.Name()
+	if err != nil {
+		return err
+	}
 	line, err := f.createLine(levelString, message)
 	if err != nil {
 		return Wrap(err, ELogWriteFailed, "failed to write log message")
