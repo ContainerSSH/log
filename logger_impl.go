@@ -1,9 +1,5 @@
 package log
 
-import (
-	"fmt"
-)
-
 type logger struct {
 	level  Level
 	labels Labels
@@ -49,14 +45,16 @@ func (pipeline *logger) write(level Level, message ...interface{}) {
 		var msg Message
 		if len(message) == 1 {
 			switch message[0].(type) {
-			case Message:
-				msg = message[0].(Message)
-			case error:
-				msg = pipeline.wrapError(message[0].(error))
 			case string:
 				msg = NewMessage(EUnknownError, message[0].(string))
 			default:
-				msg = NewMessage(EUnknownError, "%v", message[0])
+				if m, ok := message[0].(Message); ok {
+					msg = m
+				} else if m, ok := message[0].(error); ok {
+					msg = pipeline.wrapError(m)
+				} else {
+					msg = NewMessage(EUnknownError, "%v", message[0])
+				}
 			}
 		} else {
 			msg = NewMessage(EUnknownError, "%v", message)
@@ -101,59 +99,59 @@ func (pipeline *logger) wrapError(err error) Message {
 //region Messages
 
 func (pipeline *logger) Emergency(message ...interface{}) {
-	pipeline.write(LevelEmergency, message)
+	pipeline.write(LevelEmergency, message...)
 }
 func (pipeline *logger) Emergencyf(format string, args ...interface{}) {
-	pipeline.writef(LevelEmergency, format, args)
+	pipeline.writef(LevelEmergency, format, args...)
 }
 
 func (pipeline *logger) Alert(message ...interface{}) {
-	pipeline.write(LevelAlert, message)
+	pipeline.write(LevelAlert, message...)
 }
 func (pipeline *logger) Alertf(format string, args ...interface{}) {
-	pipeline.writef(LevelAlert, format, args)
+	pipeline.writef(LevelAlert, format, args...)
 }
 
 func (pipeline *logger) Critical(message ...interface{}) {
-	pipeline.write(LevelCritical, message)
+	pipeline.write(LevelCritical, message...)
 }
 func (pipeline *logger) Criticalf(format string, args ...interface{}) {
-	pipeline.writef(LevelCritical, format, args)
+	pipeline.writef(LevelCritical, format, args...)
 }
 
 func (pipeline *logger) Error(message ...interface{}) {
-	pipeline.write(LevelError, message)
+	pipeline.write(LevelError, message...)
 }
 func (pipeline *logger) Errorf(format string, args ...interface{}) {
-	pipeline.writef(LevelError, format, args)
+	pipeline.writef(LevelError, format, args...)
 }
 
 func (pipeline *logger) Warning(message ...interface{}) {
-	pipeline.write(LevelWarning, message)
+	pipeline.write(LevelWarning, message...)
 }
 func (pipeline *logger) Warningf(format string, args ...interface{}) {
-	pipeline.writef(LevelWarning, format, args)
+	pipeline.writef(LevelWarning, format, args...)
 }
 
 func (pipeline *logger) Notice(message ...interface{}) {
-	pipeline.write(LevelNotice, message)
+	pipeline.write(LevelNotice, message...)
 }
 func (pipeline *logger) Noticef(format string, args ...interface{}) {
-	pipeline.writef(LevelNotice, format, args)
+	pipeline.writef(LevelNotice, format, args...)
 }
 
 func (pipeline *logger) Info(message ...interface{}) {
-	pipeline.write(LevelInfo, message)
+	pipeline.write(LevelInfo, message...)
 }
 func (pipeline *logger) Infof(format string, args ...interface{}) {
-	pipeline.writef(LevelInfo, format, args)
+	pipeline.writef(LevelInfo, format, args...)
 }
 
 func (pipeline *logger) Debug(message ...interface{}) {
-	pipeline.write(LevelDebug, message)
+	pipeline.write(LevelDebug, message...)
 }
 func (pipeline *logger) Debugf(format string, args ...interface{}) {
-	pipeline.writef(LevelDebug, format, args)
+	pipeline.writef(LevelDebug, format, args...)
 }
 
 //endregion
@@ -162,12 +160,12 @@ func (pipeline *logger) Debugf(format string, args ...interface{}) {
 
 // Log provides a generic log method that logs on the info level.
 func (pipeline *logger) Log(args ...interface{}) {
-	pipeline.write(LevelInfo, fmt.Errorf("%v", args...))
+	pipeline.writef(LevelInfo, "%v", args...)
 }
 
 // Logf provides a generic log method that logs on the info level with formatting.
 func (pipeline *logger) Logf(format string, args ...interface{}) {
-	pipeline.write(LevelInfo, fmt.Errorf(format, args...))
+	pipeline.writef(LevelInfo, format, args...)
 }
 
 //endregion

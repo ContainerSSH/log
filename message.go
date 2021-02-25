@@ -30,9 +30,10 @@ func UserMessage(Code string, UserMessage string, Explanation string, Args ...in
 // - Explanation is the explanation string to the system administrator. This is an fmt.Sprintf-compatible string
 // - Args are the arguments to Explanation to create a formatted message. It is recommended that these arguments also
 //   be added as labels to allow system administrators to index the error properly.
+//goland:noinspection GoUnusedExportedFunction
 func WrapUser(Cause error, Code string, User string, Explanation string, Args ...interface{}) WrappingMessage {
 	return &wrappingMessage{
-		Message: UserMessage(Code, User, Explanation, Args...),
+		Message: UserMessage(Code, User, Explanation+" (%v)", append(Args, Cause)...),
 		cause:   Cause,
 	}
 }
@@ -46,7 +47,7 @@ func WrapUser(Cause error, Code string, User string, Explanation string, Args ..
 func NewMessage(Code string, Explanation string, Args ...interface{}) Message {
 	return UserMessage(
 		Code,
-		"Internal NewMessage",
+		"Internal Error",
 		Explanation,
 		Args...,
 	)

@@ -30,7 +30,7 @@ func (f *fileHandleWriter) Write(level Level, message Message) error {
 	if err != nil {
 		return Wrap(err, ELogWriteFailed, "failed to write log message")
 	}
-	if _, err := f.fh.Write(line); err != nil {
+	if _, err := f.fh.Write(append(line, '\n')); err != nil {
 		return Wrap(err, ELogWriteFailed, "failed to write log message")
 	}
 	return nil
@@ -50,6 +50,7 @@ func (f *fileHandleWriter) createLine(levelString LevelString, message Message) 
 		line, err = json.Marshal(
 			jsonLine{
 				Time:    time.Now().Format(time.RFC3339),
+				Code:    message.Code(),
 				Level:   string(levelString),
 				Message: message,
 			},
@@ -73,6 +74,7 @@ func (f *fileHandleWriter) createLine(levelString LevelString, message Message) 
 type jsonLine struct {
 	Time  string
 	Level string
+	Code  string
 
 	Message
 }
@@ -81,6 +83,7 @@ func (j jsonLine) MarshalJSON() ([]byte, error) {
 	data := map[string]interface{}{}
 	data["timestamp"] = j.Time
 	data["level"] = j.Level
+	data["code"] = j.Code
 	data["message"] = j.Explanation()
 	details := map[string]interface{}{}
 	for label, value := range j.Labels() {
