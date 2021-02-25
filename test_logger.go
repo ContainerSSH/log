@@ -9,10 +9,10 @@ import (
 func NewTestLogger(t *testing.T) Logger {
 	logger, err := NewLogger(
 		Config{
-			Level:  LevelDebug,
-			Format: FormatText,
-			Output: OutputTest,
-			T:      t,
+			Level:       LevelDebug,
+			Format:      FormatText,
+			Destination: DestinationTest,
+			T:           t,
 		},
 	)
 	if err != nil {

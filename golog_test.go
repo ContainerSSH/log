@@ -14,10 +14,10 @@ func TestGoLog(t *testing.T) {
 	writer := &bytes.Buffer{}
 	logger := log.MustNewLogger(
 		log.Config{
-			Level:  log.LevelDebug,
-			Format: log.FormatText,
-			Output: log.OutputStdout,
-			Stdout: writer,
+			Level:       log.LevelDebug,
+			Format:      log.FormatText,
+			Destination: log.DestinationStdout,
+			Stdout:      writer,
 		},
 	)
 	goLogWriter := log.NewGoLogWriter(logger)

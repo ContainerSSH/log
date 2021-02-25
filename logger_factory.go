@@ -51,24 +51,24 @@ func (f *loggerFactory) Make(config Config) (Logger, error) {
 		return nil, err
 	}
 
-	if err := config.Output.Validate(); err != nil {
+	if err := config.Destination.Validate(); err != nil {
 		return nil, err
 	}
 
 	var writer Writer
 	var err error = nil
-	switch config.Output {
-	case OutputFile:
+	switch config.Destination {
+	case DestinationFile:
 		writer, err = newFileWriter(config.File, config.Format)
-	case OutputStdout:
+	case DestinationStdout:
 		var stdout io.Writer = os.Stdout
 		if config.Stdout != nil {
 			stdout = config.Stdout
 		}
 		writer, err = newStdoutWriter(stdout, config.Format)
-	case OutputSyslog:
+	case DestinationSyslog:
 		writer, err = newSyslogWriter(config.Syslog, config.Format)
-	case OutputTest:
+	case DestinationTest:
 		writer = newGoTest(config.T)
 	}
 	if err != nil {

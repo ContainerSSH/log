@@ -18,19 +18,19 @@ type Config struct {
 	// Format describes the log message format
 	Format Format `json:"format" yaml:"format" default:"ljson"`
 
-	// Output is the target to write the log messages to.
-	Output Output `json:"output" yaml:"output" default:"stdout"`
+	// Destination is the target to write the log messages to.
+	Destination Destination `json:"destination" yaml:"destination" default:"stdout"`
 
-	// File is the log file to write to if Output is set to "file".
+	// File is the log file to write to if Destination is set to "file".
 	File string `json:"file" yaml:"file" default:"/var/log/containerssh/containerssh.log"`
 
-	// Syslog configures the syslog output.
+	// Syslog configures the syslog destination.
 	Syslog SyslogConfig `json:"syslog" yaml:"syslog"`
 
 	// T is the Go test for logging purposes.
 	T *testing.T
 
-	// Stdout is the standard output used by the OutputStdout output.
+	// Stdout is the standard output used by the DestinationStdout destination.
 	Stdout io.Writer
 }
 
@@ -42,11 +42,11 @@ func (c *Config) Validate() error {
 	if err := c.Format.Validate(); err != nil {
 		return err
 	}
-	if err := c.Output.Validate(); err != nil {
+	if err := c.Destination.Validate(); err != nil {
 		return err
 	}
-	if c.Output == OutputTest && c.T == nil {
-		return fmt.Errorf("test log output selected but no test case provided")
+	if c.Destination == DestinationTest && c.T == nil {
+		return fmt.Errorf("test log destination selected but no test case provided")
 	}
 	return nil
 }
@@ -240,32 +240,32 @@ func (format Format) Validate() error {
 
 // endregion
 
-// region Output
+// region Destination
 
-// Output is the output to write to.
+// Destination is the output to write to.
 //swagger:enum
-type Output string
+type Destination string
 
 const (
-	// OutputStdout is writing log messages to the standard output.
-	OutputStdout Output = "stdout"
-	// OutputFile is writing the log messages to a file.
-	OutputFile Output = "file"
-	// OutputSyslog is writing log messages to syslog.
-	OutputSyslog Output = "syslog"
-	// OutputTest writes the logs to the *testing.T facility.
-	OutputTest Output = "test"
+	// DestinationStdout is writing log messages to the standard output.
+	DestinationStdout Destination = "stdout"
+	// DestinationFile is writing the log messages to a file.
+	DestinationFile Destination = "file"
+	// DestinationSyslog is writing log messages to syslog.
+	DestinationSyslog Destination = "syslog"
+	// DestinationTest writes the logs to the *testing.T facility.
+	DestinationTest Destination = "test"
 )
 
 // Validate validates the output target.
-func (o Output) Validate() error {
+func (o Destination) Validate() error {
 	switch o {
-	case OutputStdout:
-	case OutputFile:
-	case OutputSyslog:
-	case OutputTest:
+	case DestinationStdout:
+	case DestinationFile:
+	case DestinationSyslog:
+	case DestinationTest:
 	default:
-		return fmt.Errorf("invalid output: %s", o)
+		return fmt.Errorf("invalid destination: %s", o)
 	}
 	return nil
 }

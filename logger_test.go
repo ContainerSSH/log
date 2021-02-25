@@ -31,10 +31,10 @@ func TestLogLevelFiltering(t *testing.T) {
 func testLevel(t *testing.T, logLevel log.Level, writeLogLevel log.Level) {
 	var buf bytes.Buffer
 	p := log.MustNewLogger(log.Config{
-		Level:  logLevel,
-		Format: log.FormatLJSON,
-		Output: log.OutputStdout,
-		Stdout: &buf,
+		Level:       logLevel,
+		Format:      log.FormatLJSON,
+		Destination: log.DestinationStdout,
+		Stdout:      &buf,
 	})
 	message := log.UserMessage("E_TEST", "test", "test")
 	switch writeLogLevel {
