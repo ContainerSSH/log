@@ -274,3 +274,27 @@ You can create a logger for testing purposes that logs using the `t *testing.T` 
 ```go
 logger := log.NewTestLogger(t)
 ```
+
+## Generating message code files
+
+This package also includes a utility to generate and update a [CODES.md](CODES.md) from a [codes.go](codes.go) file in your repository to create a documentation about message codes.
+
+To use this utility your `codes.go` must contain message codes in individual const declarations with documentation, not as a `const` block. You can install this package as follows:
+
+```
+go get -u github.com/containerssh/log/cmd/containerssh-generate-codes
+``` 
+
+You can then execute `containerssh-generate-codes` to generate `CODES.md`. Optionally, you can pass the filenames as parameters:
+
+```
+containerssh-generate-codes source.go DESTINATION.md
+```
+
+We recommend creating a `gencodes.md` file with the following content:
+
+```go
+//go:generate go run containerssh-generate-codes
+```
+
+This lets you generate `CODES.md` using `go generate`.
