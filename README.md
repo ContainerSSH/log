@@ -291,9 +291,11 @@ You can then execute `containerssh-generate-codes` to generate `CODES.md`. Optio
 containerssh-generate-codes source.go DESTINATION.md
 ```
 
-We recommend creating a `gencodes.md` file with the following content:
+We recommend creating a `codes_doc.go` file with the following content:
 
 ```go
+package yourpackage
+
 //go:generate containerssh-generate-codes
 ```
 
