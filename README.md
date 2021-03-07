@@ -294,7 +294,7 @@ containerssh-generate-codes source.go DESTINATION.md
 We recommend creating a `gencodes.md` file with the following content:
 
 ```go
-//go:generate go run containerssh-generate-codes
+//go:generate containerssh-generate-codes
 ```
 
 This lets you generate `CODES.md` using `go generate`.
