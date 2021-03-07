@@ -94,6 +94,7 @@ func extractConstDocs(
 	return constDocs, nil
 }
 
+// GenerateMessageCodeFiles generates the contents of the CODES.md file and returns them.
 func GenerateMessageCodesFile(filename string) (string, error) {
 	codes, err := GetMessageCodes(filename)
 	if err != nil {
@@ -110,6 +111,7 @@ func GenerateMessageCodesFile(filename string) (string, error) {
 	return wr.String(), nil
 }
 
+// WriteMessageCodesFile generates and writes the CODES.md file
 func WriteMessageCodesFile(sourceFile string, destinationFile string) error {
 	data, err := GenerateMessageCodesFile(sourceFile)
 	if err != nil {
@@ -129,6 +131,7 @@ func WriteMessageCodesFile(sourceFile string, destinationFile string) error {
 	return nil
 }
 
+// MustWriteMessageCodesFile is identical to WriteMessageCodesFile but panics on error.
 func MustWriteMessageCodesFile(sourceFile string, destinationFile string) {
 	if err := WriteMessageCodesFile(sourceFile, destinationFile); err != nil {
 		panic(err)
