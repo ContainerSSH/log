@@ -1,5 +1,9 @@
 # Changelog
 
+## 0.9.12: CODES.md generation
+
+This release adds a utility to automatically generate an overview file of all message codes. See the readme for details.
+
 ## 0.9.11: Log cleanup
 
 This release cleans up the output format. It also deprecates the formatting messages, such as `Noticef` in favor of logging `Message` objects.
