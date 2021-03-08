@@ -1,5 +1,9 @@
 # Changelog
 
+## 0.9.13: JSON/YAML tags
+
+This release adds tags to exclude not used fields from the configuration structure.
+
 ## 0.9.12: CODES.md generation
 
 This release adds a utility to automatically generate an overview file of all message codes. See the readme for details.

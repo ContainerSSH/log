@@ -28,10 +28,10 @@ type Config struct {
 	Syslog SyslogConfig `json:"syslog" yaml:"syslog"`
 
 	// T is the Go test for logging purposes.
-	T *testing.T
+	T *testing.T `json:"-" yaml:"-"`
 
 	// Stdout is the standard output used by the DestinationStdout destination.
-	Stdout io.Writer
+	Stdout io.Writer `json:"-" yaml:"-"`
 }
 
 // Validate validates the log configuration.
@@ -492,6 +492,7 @@ var nameToFacility = map[FacilityString]Facility{
 }
 
 // SyslogConfig is the configuration for syslog logging.
+//goland:noinspection GoVetStructTag
 type SyslogConfig struct {
 	// Destination is the socket to send logs to. Can be a local path to unix sockets as well as UDP destinations.
 	Destination string `json:"destination" yaml:"destination" default:"/dev/log"`
@@ -503,9 +504,9 @@ type SyslogConfig struct {
 	Pid bool `json:"pid" yaml:"pid" default:"false"`
 
 	// connection is the connection to the Syslog server. Internal usage only.
-	connection net.Conn
+	connection net.Conn `json:"-" yaml:"-"`
 	// tag is the real syslog tag for the message
-	tag string
+	tag string `json:"-" yaml:"-"`
 }
 
 // Validate validates the syslog configuration
