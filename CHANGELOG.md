@@ -1,5 +1,9 @@
 # Changelog
 
+## 1.0.0: First stable version
+
+This version removes the deprecated `Debugf`, etc. calls and tags the log package as stable for ContainerSSH 0.4.0.
+
 ## 0.9.13: JSON/YAML tags
 
 This release adds tags to exclude not used fields from the configuration structure.

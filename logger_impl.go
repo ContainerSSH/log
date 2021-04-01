@@ -101,57 +101,33 @@ func (pipeline *logger) wrapError(err error) Message {
 func (pipeline *logger) Emergency(message ...interface{}) {
 	pipeline.write(LevelEmergency, message...)
 }
-func (pipeline *logger) Emergencyf(format string, args ...interface{}) {
-	pipeline.writef(LevelEmergency, format, args...)
-}
 
 func (pipeline *logger) Alert(message ...interface{}) {
 	pipeline.write(LevelAlert, message...)
-}
-func (pipeline *logger) Alertf(format string, args ...interface{}) {
-	pipeline.writef(LevelAlert, format, args...)
 }
 
 func (pipeline *logger) Critical(message ...interface{}) {
 	pipeline.write(LevelCritical, message...)
 }
-func (pipeline *logger) Criticalf(format string, args ...interface{}) {
-	pipeline.writef(LevelCritical, format, args...)
-}
 
 func (pipeline *logger) Error(message ...interface{}) {
 	pipeline.write(LevelError, message...)
-}
-func (pipeline *logger) Errorf(format string, args ...interface{}) {
-	pipeline.writef(LevelError, format, args...)
 }
 
 func (pipeline *logger) Warning(message ...interface{}) {
 	pipeline.write(LevelWarning, message...)
 }
-func (pipeline *logger) Warningf(format string, args ...interface{}) {
-	pipeline.writef(LevelWarning, format, args...)
-}
 
 func (pipeline *logger) Notice(message ...interface{}) {
 	pipeline.write(LevelNotice, message...)
-}
-func (pipeline *logger) Noticef(format string, args ...interface{}) {
-	pipeline.writef(LevelNotice, format, args...)
 }
 
 func (pipeline *logger) Info(message ...interface{}) {
 	pipeline.write(LevelInfo, message...)
 }
-func (pipeline *logger) Infof(format string, args ...interface{}) {
-	pipeline.writef(LevelInfo, format, args...)
-}
 
 func (pipeline *logger) Debug(message ...interface{}) {
 	pipeline.write(LevelDebug, message...)
-}
-func (pipeline *logger) Debugf(format string, args ...interface{}) {
-	pipeline.writef(LevelDebug, format, args...)
 }
 
 //endregion
