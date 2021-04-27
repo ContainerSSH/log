@@ -1,5 +1,15 @@
 # Changelog
 
+## 1.1.0: Test logging for GitHub Actions
+
+This release adds a preview of the GitHub Actions logging, which can be enabled by adding the following method:
+
+```go
+func TestMain(m *testing.M) {
+	log.RunTests(m)
+}
+```
+
 ## 1.0.0: First stable version
 
 This version removes the deprecated `Debugf`, etc. calls and tags the log package as stable for ContainerSSH 0.4.0.

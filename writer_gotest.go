@@ -1,6 +1,7 @@
 package log
 
 import (
+	"runtime"
 	"testing"
 )
 
@@ -11,7 +12,7 @@ func newGoTest(t *testing.T) Writer {
 }
 
 type goTestWriter struct {
-	t *testing.T
+	t             *testing.T
 }
 
 func (g *goTestWriter) Write(level Level, message Message) error {
@@ -19,7 +20,22 @@ func (g *goTestWriter) Write(level Level, message Message) error {
 	if err != nil {
 		return err
 	}
-	g.t.Logf("%s\t%s", levelString, message.Explanation())
+
+	if testLoggerActive {
+		_, file, line, _ := runtime.Caller(3)
+
+		g.t.Logf(
+			"\t%s\t%d\t%s\t%s\t%s\n",
+			file,
+			line,
+			levelString,
+			message.Code(),
+			message.Explanation(),
+		)
+	} else {
+		g.t.Logf("%s\t%s", levelString, message.Explanation())
+	}
+
 	return nil
 }
 

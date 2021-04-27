@@ -275,6 +275,14 @@ You can create a logger for testing purposes that logs using the `t *testing.T` 
 logger := log.NewTestLogger(t)
 ```
 
+You may also want to enable GitHub Actions logging by creating the following method:
+
+```go
+func TestMain(m *testing.M) {
+	log.RunTests(m)
+}
+```
+
 ## Generating message code files
 
 This package also includes a utility to generate and update a [CODES.md](CODES.md) from a [codes.go](codes.go) file in your repository to create a documentation about message codes.
