@@ -1,5 +1,9 @@
 # Changelog
 
+## 1.1.1: Bumped Go requirements to 1.16
+
+This release bumps the Go requirements to 1.16.
+
 ## 1.1.0: Test logging for GitHub Actions
 
 This release adds a preview of the GitHub Actions logging, which can be enabled by adding the following method:
