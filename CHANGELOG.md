@@ -1,5 +1,9 @@
 # Changelog
 
+## 1.1.3: Changed icons and colors
+
+This release changes the icons and colors for the GitHub Actions output.
+
 ## 1.1.2: Removed panic on last line
 
 This release removes the last line panic.
