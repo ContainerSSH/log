@@ -66,16 +66,16 @@ func runWithGitHubActions(m *testing.M) int {
 }
 
 type logOutputFormat struct {
-	symbol string
-	color string
+	symbol      string
+	color       string
 	symbolColor string
 }
 
 var logLevelConfig = map[LevelString]logOutputFormat{
 	LevelDebugString: {
-		symbol: "🔍",
-		color: "\033[32m",
-		symbolColor: "\033[32m",
+		symbol:      "⚙️",
+		color:       "",
+		symbolColor: "",
 	},
 	LevelInfoString: {
 		symbol:      "ⓘ️",
@@ -83,12 +83,12 @@ var logLevelConfig = map[LevelString]logOutputFormat{
 		symbolColor: "\033[34m",
 	},
 	LevelNoticeString: {
-		symbol:      "👉",
+		symbol:      "🏷️",
 		color:       "\033[33m",
 		symbolColor: "\033[33m",
 	},
 	LevelWarningString: {
-		symbol:      "⚠",
+		symbol:      "⚠️",
 		color:       "\033[33m",
 		symbolColor: "\033[33m",
 	},
@@ -103,7 +103,7 @@ var logLevelConfig = map[LevelString]logOutputFormat{
 		symbolColor: "\033[31m",
 	},
 	LevelAlertString: {
-		symbol:      "⏰",
+		symbol:      "🔔",
 		color:       "\033[31m",
 		symbolColor: "\033[31m",
 	},
@@ -141,8 +141,8 @@ func writeTestcase(c *testCase) {
 }
 
 type gitHubActionsWriter struct {
-	backend io.Writer
-	lock *sync.Mutex
+	backend   io.Writer
+	lock      *sync.Mutex
 	testCases map[string]*testCase
 }
 
@@ -154,7 +154,7 @@ func (g *gitHubActionsWriter) Write(p []byte) (n int, err error) {
 	for _, line := range lines {
 		switch {
 		case strings.HasPrefix(strings.TrimSpace(line), "=== RUN "):
-			lastTestCase = g.processRun( line)
+			lastTestCase = g.processRun(line)
 		case strings.HasPrefix(strings.TrimSpace(line), "=== CONT "):
 			lastTestCase = g.processCont(line)
 		case strings.HasPrefix(strings.TrimSpace(line), "--- PASS:"):
@@ -243,18 +243,16 @@ func (g *gitHubActionsWriter) processRun(line string) string {
 }
 
 type testCase struct {
-	name string
-	pass bool
-	time time.Duration
+	name  string
+	pass  bool
+	time  time.Duration
 	lines []testCaseLine
 }
 
 type testCaseLine struct {
-	file string
-	line uint
-	level LevelString
-	code string
+	file    string
+	line    uint
+	level   LevelString
+	code    string
 	message string
 }
-
-
