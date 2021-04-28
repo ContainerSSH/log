@@ -1,5 +1,9 @@
 # Changelog
 
+## 1.1.2: Removed panic on last line
+
+This release removes the last line panic.
+
 ## 1.1.1: Bumped Go requirements to 1.16
 
 This release bumps the Go requirements to 1.16.

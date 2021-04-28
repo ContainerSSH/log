@@ -228,8 +228,6 @@ func (g *gitHubActionsWriter) processDefault(line string, lastTestCase string) {
 					message: strings.TrimSpace(line),
 				},
 			)
-		} else {
-			panic(fmt.Sprintf("no test case for line: %s", line))
 		}
 	}
 }
