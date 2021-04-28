@@ -51,39 +51,55 @@ func (f *fileHandleWriter) Close() error {
 func (f *fileHandleWriter) createLine(levelString LevelString, message Message) (line []byte, err error) {
 	switch f.format {
 	case FormatLJSON:
-		details := map[string]interface{}{}
-		for label, value := range message.Labels() {
-			details[string(label)] = value
-		}
-		line, err = json.Marshal(
-			jsonLine{
-				Time:    time.Now().Format(time.RFC3339),
-				Code:    message.Code(),
-				Level:   string(levelString),
-				Message: message.Explanation(),
-				Details: details,
-			},
-		)
+		line, err = f.createLineLJSON(levelString, message)
 		if err != nil {
 			return nil, err
 		}
 	case FormatText:
-		msg := message.Explanation()
-		var labels []string
-		for labelName, labelValue := range message.Labels() {
-			labels = append(labels, fmt.Sprintf("%s=%s", labelName, labelValue))
-		}
-		if len(labels) > 0 {
-			msg += fmt.Sprintf(" (%s)", strings.Join(labels, " "))
-		}
-		line = []byte(fmt.Sprintf(
-			"%s\t%s\t%s\n",
-			time.Now().Format(time.RFC3339),
-			levelString,
-			msg,
-		))
+		line = f.createLineText(levelString, message)
 	default:
 		return nil, fmt.Errorf("log format not supported: %s", f.format)
+	}
+	return line, nil
+}
+
+func (f *fileHandleWriter) createLineText(levelString LevelString, message Message) []byte {
+	msg := message.Explanation()
+	var labels []string
+	for labelName, labelValue := range message.Labels() {
+		labels = append(labels, fmt.Sprintf("%s=%s", labelName, labelValue))
+	}
+	if len(labels) > 0 {
+		msg += fmt.Sprintf(" (%s)", strings.Join(labels, " "))
+	}
+	line := []byte(fmt.Sprintf(
+		"%s\t%s\t%s\n",
+		time.Now().Format(time.RFC3339),
+		levelString,
+		msg,
+	))
+	return line
+}
+
+func (f *fileHandleWriter) createLineLJSON(levelString LevelString, message Message) (
+	[]byte,
+	error,
+) {
+	details := map[string]interface{}{}
+	for label, value := range message.Labels() {
+		details[string(label)] = value
+	}
+	line, err := json.Marshal(
+		jsonLine{
+			Time:    time.Now().Format(time.RFC3339),
+			Code:    message.Code(),
+			Level:   string(levelString),
+			Message: message.Explanation(),
+			Details: details,
+		},
+	)
+	if err != nil {
+		return nil, err
 	}
 	return line, nil
 }
