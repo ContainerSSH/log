@@ -32,6 +32,8 @@ func runWithGitHubActions(m *testing.M) int {
 		os.Stdout,
 		&sync.Mutex{},
 		map[string]*testCase{},
+		"",
+		"",
 	}
 	oldStdout := os.Stdout
 	tmpFile, err := os.CreateTemp(os.TempDir(), "test-")
@@ -141,34 +143,40 @@ func writeTestcase(c *testCase) {
 }
 
 type gitHubActionsWriter struct {
-	backend   io.Writer
-	lock      *sync.Mutex
-	testCases map[string]*testCase
+	backend      io.Writer
+	lock         *sync.Mutex
+	testCases    map[string]*testCase
+	lastTestCase string
+	lastLine     string
 }
 
 func (g *gitHubActionsWriter) Write(p []byte) (n int, err error) {
 	g.lock.Lock()
 	defer g.lock.Unlock()
-	lines := strings.Split(string(p), "\n")
-	lastTestCase := ""
-	for _, line := range lines {
+	lines := strings.Split(fmt.Sprintf("%s%s", g.lastLine, string(p)), "\n")
+	for _, line := range lines[:len(lines)-1] {
+		if strings.TrimSpace(line) == "" {
+			continue
+		}
 		switch {
 		case strings.HasPrefix(strings.TrimSpace(line), "=== RUN "):
-			lastTestCase = g.processRun(line)
+			g.lastTestCase = g.processRun(line)
 		case strings.HasPrefix(strings.TrimSpace(line), "=== CONT "):
-			lastTestCase = g.processCont(line)
+			g.lastTestCase = g.processCont(line)
+		case strings.HasPrefix(strings.TrimSpace(line), "=== PAUSE "):
+			g.lastTestCase = g.processPause(line)
 		case strings.HasPrefix(strings.TrimSpace(line), "--- PASS:"):
-			g.processPass(line)
-			fallthrough
+			g.lastTestCase = g.processPass(line)
 		case strings.HasPrefix(strings.TrimSpace(line), "--- FAIL:"):
-			lastTestCase = g.processFail(line)
+			g.lastTestCase = g.processFail(line)
 		case line == "PASS":
 		case line == "FAIL":
 		case line == "":
 		default:
-			g.processDefault(line, lastTestCase)
+			g.processDefault(line)
 		}
 	}
+	g.lastLine = lines[len(lines)-1]
 	return len(p), nil
 }
 
@@ -176,10 +184,16 @@ func (g *gitHubActionsWriter) processCont(line string) string {
 	return strings.TrimSpace(strings.Replace(line, "=== CONT ", "", 1))
 }
 
-func (g *gitHubActionsWriter) processPass(line string) {
+func (g *gitHubActionsWriter) processPause(line string) string {
+	return strings.TrimSpace(strings.Replace(line, "=== PAUSE ", "", 1))
+}
+
+func (g *gitHubActionsWriter) processPass(line string) string {
 	parts := strings.SplitN(strings.TrimSpace(line), " ", 4)
 	lastTestCase := parts[2]
 	g.testCases[lastTestCase].pass = true
+	lastTestCase = ""
+	return lastTestCase
 }
 
 func (g *gitHubActionsWriter) processFail(line string) string {
@@ -196,30 +210,34 @@ func (g *gitHubActionsWriter) processFail(line string) string {
 	return lastTestCase
 }
 
-func (g *gitHubActionsWriter) processDefault(line string, lastTestCase string) {
+func (g *gitHubActionsWriter) processDefault(line string) {
 	parts := strings.SplitN(strings.TrimSpace(line), "\t", 6)
 	if len(parts) == 6 {
 		lineNumber, err := strconv.ParseUint(parts[2], 10, 64)
 		if err != nil {
 			panic(err)
 		}
-		g.testCases[lastTestCase].lines = append(
-			g.testCases[lastTestCase].lines,
-			testCaseLine{
-				file:    parts[1],
-				line:    uint(lineNumber),
-				level:   LevelString(parts[3]),
-				code:    parts[4],
-				message: strings.TrimSpace(parts[5]),
-			},
-		)
+		if g.lastTestCase != "" {
+			g.testCases[g.lastTestCase].lines = append(
+				g.testCases[g.lastTestCase].lines,
+				testCaseLine{
+					file:    parts[1],
+					line:    uint(lineNumber),
+					level:   LevelString(parts[3]),
+					code:    parts[4],
+					message: strings.TrimSpace(parts[5]),
+				},
+			)
+		} else {
+			panic(fmt.Errorf("no test case for %s, line: %s", g.lastTestCase, line))
+		}
 	} else {
-		if lastTestCase != "" {
-			if _, ok := g.testCases[lastTestCase]; !ok {
-				panic(fmt.Errorf("no test case for %s, line: %s", lastTestCase, line))
+		if g.lastTestCase != "" {
+			if _, ok := g.testCases[g.lastTestCase]; !ok {
+				panic(fmt.Errorf("no test case for %s, line: %s", g.lastTestCase, line))
 			}
-			g.testCases[lastTestCase].lines = append(
-				g.testCases[lastTestCase].lines,
+			g.testCases[g.lastTestCase].lines = append(
+				g.testCases[g.lastTestCase].lines,
 				testCaseLine{
 					file:    "",
 					line:    0,

@@ -1,5 +1,9 @@
 # Changelog
 
+## 1.1.4: Bugfixes for test logger
+
+This release fixes a number of bugs found when using the test logger for GitHub Actions output.
+
 ## 1.1.3: Changed icons and colors
 
 This release changes the icons and colors for the GitHub Actions output.
