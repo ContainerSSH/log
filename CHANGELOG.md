@@ -1,5 +1,9 @@
 # Changelog
 
+## 1.1.6: Added timing information
+
+This release adds timing information to successful tests.
+
 ## 1.1.5: Beautify log output
 
 This release sorts the tests and displays a collapsible test result even if there are no logs to format the tests uniformly.
