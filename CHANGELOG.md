@@ -1,5 +1,9 @@
 # Changelog
 
+## 1.1.5: Beautify log output
+
+This release sorts the tests and displays a collapsible test result even if there are no logs to format the tests uniformly.
+
 ## 1.1.4: Bugfixes for test logger
 
 This release fixes a number of bugs found when using the test logger for GitHub Actions output.

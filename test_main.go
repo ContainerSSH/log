@@ -5,6 +5,7 @@ import (
 	"io"
 	"os"
 	"path"
+	"sort"
 	"strconv"
 	"strings"
 	"sync"
@@ -60,8 +61,13 @@ func runWithGitHubActions(m *testing.M) int {
 	_ = tmpFile.Close()
 	_ = os.Remove(tmpFile.Name())
 
-	for _, testCase := range w.testCases {
-		writeTestcase(testCase)
+	var testCases []string
+	for testCaseName := range w.testCases {
+		testCases = append(testCases, testCaseName)
+	}
+	sort.Strings(testCases)
+	for _, testCaseName := range testCases {
+		writeTestcase(w.testCases[testCaseName])
 	}
 
 	return result
@@ -117,13 +123,11 @@ var logLevelConfig = map[LevelString]logOutputFormat{
 }
 
 func writeTestcase(c *testCase) {
-	if len(c.lines) > 0 {
-		fmt.Printf("::group::")
-	}
+	fmt.Printf("::group::")
 	if c.pass {
 		fmt.Printf("\033[0;32m✅ %s\033[0m (%s)\n", c.name, c.time)
 	} else {
-		fmt.Printf("::group::\033[0;31m❌ %s\033[0m (%s)\n", c.name, c.time)
+		fmt.Printf("\033[0;31m❌ %s\033[0m (%s)\n", c.name, c.time)
 	}
 	for _, line := range c.lines {
 		format := logLevelConfig[line.level]
@@ -137,9 +141,7 @@ func writeTestcase(c *testCase) {
 			line.line,
 		)
 	}
-	if len(c.lines) > 0 {
-		fmt.Printf("::endgroup::\n")
-	}
+	fmt.Printf("::endgroup::\n")
 }
 
 type gitHubActionsWriter struct {
@@ -204,8 +206,6 @@ func (g *gitHubActionsWriter) processFail(line string) string {
 		panic(err)
 	}
 	g.testCases[lastTestCase].time = t
-	writeTestcase(g.testCases[lastTestCase])
-	delete(g.testCases, lastTestCase)
 	lastTestCase = ""
 	return lastTestCase
 }
