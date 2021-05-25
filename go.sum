@@ -1,5 +1,5 @@
-github.com/containerssh/structutils v1.0.0 h1:XwNSnjmoJpMP8hxX5YbDJRGcU66znRWP5jKUYI2Kh4s=
-github.com/containerssh/structutils v1.0.0/go.mod h1:Dp5tCtnkT19A9BFNP4+flL5R+THvBgp95eO640fR+ow=
+github.com/containerssh/structutils v1.1.0 h1:vG+m3Pf73YZctMdpg6TmZejArhGnKACYCPm6r396hm8=
+github.com/containerssh/structutils v1.1.0/go.mod h1:I9U5+GGikYxWHrRkeQukiQ4zKqi90Ej2Ttgmvryflc4=
 github.com/creasty/defaults v1.5.1 h1:j8WexcS3d/t4ZmllX4GEkl4wIB/trOr035ajcLHCISM=
 github.com/creasty/defaults v1.5.1/go.mod h1:FPZ+Y0WNrbqOVw+c6av63eyHUAl6pMHZwqLPvXUZGfY=
 github.com/davecgh/go-spew v1.1.0/go.mod h1:J7Y8YcW2NihsgmVo/mv3lAwl/skON4iLHjSsI+c5H38=
